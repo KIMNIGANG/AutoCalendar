@@ -89,16 +89,15 @@ export class Schedule {
                             "を過ぎてしまいます."
                         );
                         console.log("警告：この予定の追加はやめといたほうがいいよ!");
-                    } else {
-                        // 締め切りの過ぎていないタスクを追加する
-                        times.splice(i, 0, event.task_children[i].specified_time);
-                        if (i + 1 < event.task_children.length) {
-                            event.task_children[i + 1].specified_time[0] =
-                                event.task_children[i].specified_time[1] + 60 * 60 * 1000; // 60分ごとに行う
-                            event.task_children[i + 1].specified_time[1] =
-                                event.task_children[i + 1].specified_time[0] +
-                                event.task_children[i + 1].required_time;
-                        }
+                    }
+                    // 締め切りの過ぎていないタスクを追加する
+                    times.splice(i, 0, event.task_children[i].specified_time);
+                    if (i + 1 < event.task_children.length) {
+                        event.task_children[i + 1].specified_time[0] =
+                            event.task_children[i].specified_time[1] + 60 * 60 * 1000; // 60分ごとに行う
+                        event.task_children[i + 1].specified_time[1] =
+                            event.task_children[i + 1].specified_time[0] +
+                            event.task_children[i + 1].required_time;
                     }
                     if (j > 0) {
                         j--;
@@ -150,21 +149,20 @@ export class Schedule {
                             "を過ぎてしまいます."
                         );
                         console.log("警告：この予定の追加はやめといたほうがいいよ!");
-                    } else {
-                        // 締め切りの過ぎていないタスクを追加する
-                        times.splice(i, 0, event.task_children[i].specified_time);
-                        if (i + 1 < event.task_children.length) {
-                            const tmp = new Date(event.task_children[i].specified_time[1]);
-                            event.task_children[i + 1].specified_time[0] = new Date(
-                                tmp.getFullYear(),
-                                tmp.getMonth(),
-                                tmp.getDate() + 1,
-                                8
-                            ).getTime(); // 寝る時間等を設定できたら8時になってるところを消してもよい
-                            event.task_children[i + 1].specified_time[1] =
-                                event.task_children[i + 1].specified_time[0] +
-                                event.task_children[i + 1].required_time;
-                        }
+                    }
+                    // 締め切りの過ぎていないタスクを追加する
+                    times.splice(i, 0, event.task_children[i].specified_time);
+                    if (i + 1 < event.task_children.length) {
+                        const tmp = new Date(event.task_children[i].specified_time[1]);
+                        event.task_children[i + 1].specified_time[0] = new Date(
+                            tmp.getFullYear(),
+                            tmp.getMonth(),
+                            tmp.getDate() + 1,
+                            8
+                        ).getTime(); // 寝る時間等を設定できたら8時になってるところを消してもよい
+                        event.task_children[i + 1].specified_time[1] =
+                            event.task_children[i + 1].specified_time[0] +
+                            event.task_children[i + 1].required_time;
                     }
                     if (j > 0) {
                         j--;
