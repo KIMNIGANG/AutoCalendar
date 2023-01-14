@@ -1,3 +1,4 @@
+import { computeShrinkWidth } from "fullcalendar";
 import { FullCalendar } from "../dist/index.global.js"
 import { all_tasks } from "./get_tasks.js";
 
@@ -36,6 +37,21 @@ class DrawCalendar{
                         event.color = "darkgray";
                     
                 }
+                switch (child.repeat_unit) {
+                    case "day":
+                        event.dow = [child.specified_time[0].getDay()];
+                        break;
+                    case "week":
+                        event.dow = [child.specified_time[0].getDay()];
+                        break;
+                    case "month":
+                        break;
+                    case "year":
+                          break;
+                    default:
+                          break;
+                }
+
                 tasks.push(event);
             }
         }

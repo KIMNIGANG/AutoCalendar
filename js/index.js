@@ -34,20 +34,79 @@ for (const task of all_tasks) {
     }
 
     let number_of_child = 0;
-    for (const child of task.task_children) {
-      ++number_of_child;
-      let time_0 = timestampToDisplay(child.specified_time[0]);
-      let time_1 = timestampToDisplay(child.specified_time[1]);
 
-      task_container.innerHTML += `
-      <p>実施日${number_of_child}：${time_0}~${time_1}</p>
-            `;
+    if (task.repeat_unit != "null") {  // 繰り返しの予定の場合には簡潔な文章にする.
+      for (const child of task.task_children) {
+        switch (child.repeat_unit) {
+          case "day":
+            let time_0_day = timestampToDisplay(child.specified_time[0], 2);
+            let time_1_day = timestampToDisplay(child.specified_time[1], 2);
+            let time_0_day_String = time_0_day["hour"] + ":" + time_0_day["minute"];
+            let time_1_day_String = time_1_day["hour"] + ":" + time_1_day["minute"];
+            task_container.innerHTML += `
+            <p>実施日：毎日 ${time_0_day_String}~${time_1_day_String}</p>
+                `;
+            break;
+          case "week":
+            let time_0_week = timestampToDisplay(child.specified_time[0], 2);
+            let time_1_week = timestampToDisplay(child.specified_time[1], 2);
+            let time_0_week_String = time_0_week["hour"] + ":" + time_0_week["minute"];
+            let time_1_week_String = time_1_week["hour"] + ":" + time_1_week["minute"];
+            let day = "";
+            switch (child.specified_time[0].getDay()) {
+              case 0:
+                day = "日曜";
+                break;
+              case 1:
+                day = "月曜";
+                break;
+              case 2:
+                day = "火曜";
+                break;
+              case 3:
+                day = "水曜";
+                break;
+              case 4:
+                day = "木曜";
+                break;
+              case 5:
+                day = "金曜";
+                break;
+              case 6:
+                day = "土曜";
+                break;
+              default:
+                break;
+            }
+            task_container.innerHTML += `
+            <p>実施日：毎週${day} ${time_0_week_String}~${time_1_week_String}</p>
+                `;
+            break;
+          case "month":
+            break;
+          case "year":
+              break;
+          default:
+              break;
+        }
+      }
     }
-    if (task.deadline != null) {
-      let time_d = timestampToDisplay(task.deadline);
-      task_container.innerHTML += `
-       <p>締切日：${time_d}</p>
-       `;
+    else {
+      for (const child of task.task_children) {
+        ++number_of_child;
+        let time_0 = timestampToDisplay(child.specified_time[0]);
+        let time_1 = timestampToDisplay(child.specified_time[1]);
+  
+        task_container.innerHTML += `
+        <p>実施日${number_of_child}：${time_0}~${time_1}</p>
+              `;
+      }
+      if (task.deadline != null) {
+        let time_d = timestampToDisplay(task.deadline);
+        task_container.innerHTML += `
+         <p>締切日：${time_d}</p>
+         `;
+      }
     }
 
     document.getElementById("task_list_container").appendChild(task_container);
