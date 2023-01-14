@@ -204,6 +204,11 @@ export class Schedule {
                 switch(this.on_time[i].repeat_unit) {
                     case "week":
                         var tmp = now;
+                        var day = tmp.getDay();
+                        // 繰り返す曜日を取得
+                        while (day.getDay() != this.on_time[i].specified_time[0].getDay()) {
+                            tmp.setDate(tmp.getDate() + 1);
+                        } 
                         // 繰り返し予定の開始時刻
                         var Start = new Date(
                             tmp.getFullYear(),
@@ -215,7 +220,7 @@ export class Schedule {
                             this.on_time[i].specified_time[0].getMilliseconds()
                         );
                         var End;  // 繰り返し予定の終了時刻
-                        if ((new Date(this.on_time[i].specified_time[0].getDate())) != (new Date(this.on_time[i].specified_time[1].getDate()))) {
+                        if ((new Date(this.on_time[i].specified_time[0])).getDate() != (new Date(this.on_time[i].specified_time[1])).getDate()) {
                             // 日にちをまたいでいたら, 日にちを調整
                             End = new Date(
                                 tmp.getFullYear(),
@@ -292,7 +297,7 @@ export class Schedule {
                             this.on_time[i].specified_time[0].getMilliseconds()
                         );
                         var End;  // 繰り返し予定の終了時刻
-                        if ((new Date(this.on_time[i].specified_time[0].getDate())) != (new Date(this.on_time[i].specified_time[1].getDate()))) {
+                        if ((new Date(this.on_time[i].specified_time[0])).getDate() != (new Date(this.on_time[i].specified_time[1])).getDate()) {
                             // 日にちをまたいでいたら, 日にちを調整
                             End = new Date(
                                 tmp.getFullYear(),

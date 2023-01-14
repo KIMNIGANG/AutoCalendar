@@ -280,12 +280,14 @@ function Plan_or_Task() {
       document.getElementById("deadline_form").style.display = "none";
       document.getElementById("len_form").style.display = "none";
       document.getElementById("auto_scheduling_form").style.display = "none";
+      document.getElementById("repeat_unit_form").style.display = "";
       document.getElementById("auto_scheduling").checked = false;
       AutoScheduling();
     } else if (Plan_or_Task == "Task") {
       document.getElementById("deadline_form").style.display = "";
       document.getElementById("len_form").style.display = "";
       document.getElementById("auto_scheduling_form").style.display = "";
+      document.getElementById("repeat_unit_form").style.display = "none";
       document.getElementById("auto_scheduling").checked = true;
       AutoScheduling();
     }
@@ -593,7 +595,7 @@ function get_new_task() {
         a["auto_scheduling"],
         new_specified_time,
         Number(a["unit_time"])/60,
-        null,
+        a["repeat_unit"],
         Number(a["importance"]),
         a["place"],
         a["color"],
