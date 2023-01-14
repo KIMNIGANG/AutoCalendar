@@ -1,3 +1,4 @@
+import { MountHook } from "fullcalendar";
 import { Task } from "../js/class_Task.js";
 
 export class Schedule {
@@ -188,7 +189,186 @@ export class Schedule {
         if (task.auto_scheduled) {
             // 自動スケジューリングをする処理 (task_childrenはコンストラクタで更新している → 子タスクがあればtask_childrenに要素が2個以上入っている.)
             this.auto_schedule.push(task);
+            // 締め切り時刻までにある定例スケジュールを全て格納
+            var regularSchedules = [];
+            var now = new Date();  // 現在時刻
+            var MaxDeadlineTask = this.auto_schedule[0];  // 締切日の最大値
+            for (var i = 1; i < this.auto_schedule.length; i++) {
+                if (this.auto_schedule[i].deadline.getTime() > MaxDeadlineTask.getTime()) {
+                    MaxDeadlineTask = this.auto_schedule[i];
+                }
+            }
+            // 定例スケジュールの格納
+            var On_time_length = this.on_time.length;
+            for (var i = 0; i < On_time_length; i++) {
+                switch(this.on_time[i].repeat_unit) {
+                    case "week":
+                        var tmp = now;
+                        // 繰り返し予定の開始時刻
+                        var Start = new Date(
+                            tmp.getFullYear(),
+                            tmp.getMonth(),
+                            tmp.getDate(),
+                            this.on_time[i].specified_time[0].getHours(),
+                            this.on_time[i].specified_time[0].getMinutes(),
+                            this.on_time[i].specified_time[0].getSeconds(),
+                            this.on_time[i].specified_time[0].getMilliseconds()
+                        );
+                        var End;  // 繰り返し予定の終了時刻
+                        if ((new Date(this.on_time[i].specified_time[0].getDate())) != (new Date(this.on_time[i].specified_time[1].getDate()))) {
+                            // 日にちをまたいでいたら, 日にちを調整
+                            End = new Date(
+                                tmp.getFullYear(),
+                                tmp.getMonth(),
+                                tmp.getDate() + 1,
+                                this.on_time[i].specified_time[1].getHours(),
+                                this.on_time[i].specified_time[1].getMinutes(),
+                                this.on_time[i].specified_time[1].getSeconds(),
+                                this.on_time[i].specified_time[1].getMilliseconds()
+                            );
+                        }
+                        else {
+                            End = new Date(
+                                tmp.getFullYear(),
+                                tmp.getMonth(),
+                                tmp.getDate(),
+                                this.on_time[i].specified_time[1].getHours(),
+                                this.on_time[i].specified_time[1].getMinutes(),
+                                this.on_time[i].specified_time[1].getSeconds(),
+                                this.on_time[i].specified_time[1].getMilliseconds()
+                            );  
+                        }
+                        // 1ヶ月後 
+                        var MonthAfter = new Date(
+                            tmp.getFullYear(),
+                            tmp.getMonth() + 2,
+                            tmp.getDate(),
+                            this.on_time[i].specified_time[0].getHours(),
+                            this.on_time[i].specified_time[0].getMinutes(),
+                            this.on_time[i].specified_time[0].getSeconds(),
+                            this.on_time[i].specified_time[0].getMilliseconds()
+                        );
+                        var Deadline = MaxDeadlineTask.deadline;  // 全体タスクの締め切り最大時刻
+                        while (tmp.getTime() <= MonthAfter.getTime() || tmp.getTime() < Deadline.getTime()) {  
+                            // 締め切り前の定例予定を全て入れる (ただし, 1ヶ月後までは最低限入れておく.) 
+                            var new_task = new Task(
+                                this.on_time[i].id + 123,  // 適当な番号
+                                this.on_time[i].name,
+                                this.on_time[i].category,
+                                this.on_time[i].overview,
+                                this.on_time[i].favorite,
+                                this.on_time[i].plan_or_task,
+                                this.on_time[i].finished,
+                                this.on_time[i].duplicate,
+                                this.on_time[i].deadline,
+                                this.on_time[i].required_time,
+                                this.on_time[i].days,
+                                this.on_time[i].auto_scheduled,
+                                [Start, End],
+                                -1,
+                                this.on_time[i].repeat_unit,
+                                this.on_time[i].importance,
+                                this.on_time[i].place,
+                                this.on_time[i].color,
+                                this.on_time[i].valid
+                            );
+                            regularSchedules.push(new_task);
+                            this.on_time.push(new_task);
+                            Start.setDate(Start.getDate() + 7);
+                            End.setDate(End.getDate() + 7);
+                            tmp.setDate(tmp.getDate() + 7);
+                        }
+                        break;
+                    case "day":
+                        var tmp = now;
+                        // 繰り返し予定の開始時刻
+                        var Start = new Date(
+                            tmp.getFullYear(),
+                            tmp.getMonth(),
+                            tmp.getDate(),
+                            this.on_time[i].specified_time[0].getHours(),
+                            this.on_time[i].specified_time[0].getMinutes(),
+                            this.on_time[i].specified_time[0].getSeconds(),
+                            this.on_time[i].specified_time[0].getMilliseconds()
+                        );
+                        var End;  // 繰り返し予定の終了時刻
+                        if ((new Date(this.on_time[i].specified_time[0].getDate())) != (new Date(this.on_time[i].specified_time[1].getDate()))) {
+                            // 日にちをまたいでいたら, 日にちを調整
+                            End = new Date(
+                                tmp.getFullYear(),
+                                tmp.getMonth(),
+                                tmp.getDate() + 1,
+                                this.on_time[i].specified_time[1].getHours(),
+                                this.on_time[i].specified_time[1].getMinutes(),
+                                this.on_time[i].specified_time[1].getSeconds(),
+                                this.on_time[i].specified_time[1].getMilliseconds()
+                            );
+                        }
+                        else {
+                            End = new Date(
+                                tmp.getFullYear(),
+                                tmp.getMonth(),
+                                tmp.getDate(),
+                                this.on_time[i].specified_time[1].getHours(),
+                                this.on_time[i].specified_time[1].getMinutes(),
+                                this.on_time[i].specified_time[1].getSeconds(),
+                                this.on_time[i].specified_time[1].getMilliseconds()
+                            );  
+                        }
+                        // 30日後
+                        var ThirtyDaysAfter = new Date(
+                            tmp.getFullYear(),
+                            tmp.getMonth(),
+                            tmp.getDate() + 30,
+                            this.on_time[i].specified_time[0].getHours(),
+                            this.on_time[i].specified_time[0].getMinutes(),
+                            this.on_time[i].specified_time[0].getSeconds(),
+                            this.on_time[i].specified_time[0].getMilliseconds()
+                        );
+                        var Deadline = MaxDeadlineTask.deadline;  // 全体タスクの締め切り最大時刻
+                        while (tmp.getTime() <= ThirtyDaysAfter.getTime() || tmp.getTime() < Deadline.getTime()) {  
+                            // 締め切り前の定例予定を全て入れる (ただし, 30日後までは最低限入れておく.) 
+                            var new_task = new Task(
+                                this.on_time[i].id + 123,  // 適当な番号
+                                this.on_time[i].name,
+                                this.on_time[i].category,
+                                this.on_time[i].overview,
+                                this.on_time[i].favorite,
+                                this.on_time[i].plan_or_task,
+                                this.on_time[i].finished,
+                                this.on_time[i].duplicate,
+                                this.on_time[i].deadline,
+                                this.on_time[i].required_time,
+                                this.on_time[i].days,
+                                this.on_time[i].auto_scheduled,
+                                [Start, End],
+                                -1,
+                                this.on_time[i].repeat_unit,
+                                this.on_time[i].importance,
+                                this.on_time[i].place,
+                                this.on_time[i].color,
+                                this.on_time[i].valid
+                            );
+                            regularSchedules.push(new_task);
+                            this.on_time.push(new_task);
+                            Start.setDate(Start.getDate() + 1);
+                            End.setDate(End.getDate() + 1);
+                            tmp.setDate(tmp.getDate() + 1);
+                        }
+                        break;
+                    case "month":
+                        break;
+                    case "year":
+                        break;
+                    default:
+                        break;
+                }
+            }
             this.AutoScheduling();
+            // 格納した定例スケジュールを全てなかったことにする.
+            for (var i = 0; i < regularSchedules.length; i++) {
+                this.removeTask(regularSchedules[i]);
+            }
         } else if (!task.duplicate) {
             // 自動スケジューリングをしない処理
             // 入れる予定の時間に重複していなければ入れる
