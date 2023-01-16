@@ -1,4 +1,4 @@
-import { MountHook } from "fullcalendar";
+// import { MountHook } from "fullcalendar";
 import { Task } from "../js/class_Task.js";
 
 export class Schedule {
