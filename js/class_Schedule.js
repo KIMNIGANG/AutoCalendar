@@ -39,6 +39,7 @@ export class Schedule {
         var MaxDeadline;  // 締切日の最大値
         if (this.auto_schedule.length > 0) {
             MaxDeadline = new Date(this.auto_schedule[this.auto_schedule.length - 1].deadline);  // 締め切りの一番遅いタスクは一番後ろにあるはず.
+            MaxDeadline.setDate(MaxDeadline.getDate() + 2);
             console.log(MaxDeadline);
         }
         else {
@@ -225,8 +226,13 @@ export class Schedule {
         }
 
         var times = [];
-        for (const event of this.on_time) {
-            times.push(event.specified_time);
+        // for (const event of this.on_time) {
+        //     times.push(event.specified_time);
+        // }
+        for (var i = 0; i < this.on_time.length; i++) {
+            for (const child of this.on_time[i].task_children) {
+                times.push(child.specified_time);
+            }
         }
         times.sort(function (a, b) {
             return a[0] < b[0] ? -1 : 1;

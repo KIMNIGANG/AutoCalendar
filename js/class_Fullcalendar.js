@@ -1,6 +1,7 @@
 //import { computeShrinkWidth } from "fullcalendar";
-import { FullCalendar } from "../dist/index.global.js"
+import { FullCalendar } from "../dist/index.global.js";
 import { all_tasks } from "./get_tasks.js";
+import { timestampToDisplay } from "./common.js";
 
 class DrawCalendar{
     constructor(all_tasks) {
@@ -39,11 +40,23 @@ class DrawCalendar{
                 }
                 switch (child.repeat_unit) {
                     case "day":
-                        event.dow = [0, 1, 2, 3, 4, 5, 6];
+                        event.daysOfWeek = [0, 1, 2, 3, 4, 5, 6];
+                        event.allDay = false;
+                        var timeStamp_Start = timestampToDisplay(event.start, 2);
+                        var timeStamp_End = timestampToDisplay(event.end, 2);
+                        event.startTime = timeStamp_Start.hour + ":" + timeStamp_Start.minute + ":" + "00";
+                        event.endTime = timeStamp_End.hour + ":" + timeStamp_End.minute + ":" + "00";
+                        event.color = "pink";
                         console.log("毎日");
                         break;
                     case "week":
-                        event.dow = [(new Date(child.specified_time[0])).getDay()];
+                        event.daysOfWeek = [(new Date(child.specified_time[0])).getDay()];
+                        event.allDay = false;
+                        var timeStamp_Start = timestampToDisplay(event.start, 2);
+                        var timeStamp_End = timestampToDisplay(event.end, 2);
+                        event.startTime = timeStamp_Start.hour + ":" + timeStamp_Start.minute + ":" + "00";
+                        event.endTime = timeStamp_End.hour + ":" + timeStamp_End.minute + ":" + "00";
+                        event.color = "red";  // 見やすい色に
                         console.log("毎週");
                         break;
                     case "month":
