@@ -53,7 +53,7 @@ for (const task of all_tasks) {
             let time_0_week_String = time_0_week["hour"] + ":" + time_0_week["minute"];
             let time_1_week_String = time_1_week["hour"] + ":" + time_1_week["minute"];
             let day = "";
-            switch (child.specified_time[0].getDay()) {
+            switch ((new Date(child.specified_time[0])).getDay()) {
               case 0:
                 day = "日曜";
                 break;

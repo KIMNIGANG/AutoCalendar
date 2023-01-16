@@ -40,9 +40,11 @@ class DrawCalendar{
                 switch (child.repeat_unit) {
                     case "day":
                         event.dow = [0, 1, 2, 3, 4, 5, 6];
+                        console.log("毎日");
                         break;
                     case "week":
                         event.dow = [(new Date(child.specified_time[0])).getDay()];
+                        console.log("毎週");
                         break;
                     case "month":
                         break;
