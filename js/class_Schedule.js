@@ -257,7 +257,7 @@ export class Schedule {
                     // 単位時間で分割している場合には, 個々のループを実行
                     for (; j < times.length; j++) {
                         // これがあるとなぜか上手くいかないのでとりあえず削除 (芦沢)
-                        // if ((j == 0 || times[j][1] < event.task_children[i].specified_time[0]) && event.task_children[i].specified_time[1] < times[j][0]) {
+                        // if (event.task_children[i].specified_time[1] <= times[j][0]) {
                         //     break;
                         // }
                         if (
