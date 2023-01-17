@@ -33,14 +33,12 @@ export class Schedule {
             return a.deadline < b.deadline ? -1 : 1;
         });
 
-        // 締め切り時刻までにある定例スケジュールを全て格納
+        // 元々のtask_childrenを格納
         var regularSchedules = [];
-        var now = new Date();  // 現在時刻
         var MaxDeadline;  // 締切日の最大値
         if (this.auto_schedule.length > 0) {
             MaxDeadline = new Date(this.auto_schedule[this.auto_schedule.length - 1].deadline);  // 締め切りの一番遅いタスクは一番後ろにあるはず.
             MaxDeadline.setDate(MaxDeadline.getDate() + 2);
-            console.log(MaxDeadline);
         }
         else {
             MaxDeadline = new Date();
@@ -54,7 +52,7 @@ export class Schedule {
             for (const child of this.on_time[i].task_children) {
                 switch(child.repeat_unit) {
                     case "day":
-                        var tmp = now;
+                        var tmp = new Date();
                         var StartDate = new Date(child.specified_time[0]);
                         var EndDate = new Date(child.specified_time[1]);
                         // 繰り返し予定の開始時刻
@@ -131,7 +129,7 @@ export class Schedule {
                         }
                         break;
                     case "week":
-                        var tmp = now;
+                        var tmp = new Date();
                         var StartDate = new Date(child.specified_time[0]);
                         var EndDate = new Date(child.specified_time[1]);
                         // 繰り返す曜日を取得
@@ -222,7 +220,7 @@ export class Schedule {
                         break;
                 }
             }
-            this.on_time[i].task_children = children;  // この更新
+            this.on_time[i].task_children = children;  // 子タスクの更新
         }
 
         var times = [];
@@ -237,6 +235,10 @@ export class Schedule {
         times.sort(function (a, b) {
             return a[0] < b[0] ? -1 : 1;
         });
+        for (var i = 0; i < times.length; i++) {
+            console.log("start[" + i + "] = " + (new Date(times[i][0])));
+            console.log("end[" + i + "] = " + (new Date(times[i][1])));
+        }
         for (var event of this.auto_schedule) {
             if (event.finished == true) {
                 continue;
@@ -254,9 +256,10 @@ export class Schedule {
                 for (var i = 0; i < event.task_children.length; i++) {
                     // 単位時間で分割している場合には, 個々のループを実行
                     for (; j < times.length; j++) {
-                        if (event.task_children[i].specified_time[1] <= times[j][0]) {
-                            break;
-                        }
+                        // これがあるとなぜか上手くいかないのでとりあえず削除 (芦沢)
+                        // if ((j == 0 || times[j][1] < event.task_children[i].specified_time[0]) && event.task_children[i].specified_time[1] < times[j][0]) {
+                        //     break;
+                        // }
                         if (
                             (times[j][0] >= event.task_children[i].specified_time[0] &&
                                 times[j][0] < event.task_children[i].specified_time[1]) || // スタートをまたいでいないか?
@@ -298,9 +301,11 @@ export class Schedule {
                             event.task_children[i + 1].specified_time[0] +
                             event.task_children[i + 1].required_time;
                     }
-                    if (j > 0) {
-                        j--;
-                    }
+                    // これがあるとなぜか上手くいかないのでとりあえず削除... (芦沢)
+                    // if (j > 0) {
+                    //     j--;
+                    // }
+                    j = 0;
                 }
             } else {
                 // 日割りする場合
@@ -372,6 +377,7 @@ export class Schedule {
 
         // 格納した定例スケジュールを全てなかったことにする.
         for (var i = 0; i < regularSchedules.length; i++) {
+            console.log(regularSchedules[i]);
             this.on_time[i].task_children = regularSchedules[i];
         }
     }
