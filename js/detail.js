@@ -80,7 +80,29 @@ if (selected_task) {
   let unit_time = "";
   if (selected_task.auto_scheduled == true) {
     importance = "重要度：" + selected_task.importance;
-    unit_time = "<br>分割する時間の単位:" + (selected_task.unit_time / (1000 * 60)) + "分";
+    unit_time = "<br>分割する時間の単位:";
+    if (selected_task.unit_time >= 24 * 60 * 60 * 1000) {  // (分割しない場合)
+      unit_time += "指定なし";
+    }
+    else {
+      let hour = 0;
+      let tmp = selected_task.unit_time;
+      while (tmp >= 60 * 60 * 1000) {
+        hour += 1;
+        tmp -= 60 * 60 * 1000;
+      }
+      if (hour > 0) {
+        unit_time += hour + "時間";
+      }
+      console.log("残り時間 = " + (tmp / (1000 * 60)));
+      if (tmp >= 30 * 60 * 1000) {
+        unit_time += "半";
+      }
+      else if (tmp > 0) {
+        unit_time += (tmp / (1000 * 60)) + "分";
+      }
+    }
+    // unit_time = "<br>分割する時間の単位:" + (selected_task.unit_time / (1000 * 60)) + "分";
   }
 
   let favorite;

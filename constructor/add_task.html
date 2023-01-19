@@ -419,7 +419,7 @@
                         <input type="checkbox" value="task_duplication" name="task_duplication"
                             id="task_duplication" />タスクの重複を許す
                         <br>
-                        <div id="auto_scheduling_true">
+                        <div id="auto_scheduling_true" style="display: none;">
                             重要度：
                             <select name="importance" id="importance">
                                 <option value="1">1</option>
@@ -430,7 +430,25 @@
                             </select>
                             <br>
                             分割する時間の単位：
-                            <input name="unit_time" id="unit_time" type="number" value="30" min="1"></input>分
+                            <!-- <input name="unit_time" id="unit_time" type="number" value="30" min="1"></input>分 -->
+                            <select name="unit_time" id="unit_time">
+                                <option value="1440" selected>指定なし</option>
+                                <option value="10">10分</option>
+                                <option value="15">15分</option>
+                                <option value="30">30分</option>
+                                <option value="60">1時間</option>
+                                <option value="90">1時間半</option>
+                                <option value="120">2時間</option>
+                                <option value="150">2時間半</option>
+                                <option value="180">3時間</option>
+                                <option value="240">4時間</option>
+                                <option value="300">5時間</option>
+                                <option value="360">6時間</option>
+                                <option value="420">7時間</option>
+                                <option value="480">8時間</option>
+                                <option value="540">9時間</option>
+                                <option value="600">10時間</option>
+                            </select>
                         </div>
                     </div>
 
