@@ -116,6 +116,13 @@ export class Task {
                 //     count++;
                 // }
                 // this.specified_time = [this.specified_time[0][0], this.specified_time[0][0] + count * this.unit_time];  // 時間オーバーは許す
+                
+                if (this.specified_time.length <= 0) {
+                    // 子の増加防止
+                    console.log("何故かInvalid!");
+                    this.specified_time.push([new Date(), new Date()]);  // 応急措置
+                }
+                
                 this.specified_time = [
                     this.specified_time[0][0],
                     this.specified_time[0][1],

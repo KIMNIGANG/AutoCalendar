@@ -54,6 +54,11 @@ if (selected_task) {
   }
 
 
+  let finished = "";
+  if (selected_task.finished == true) {
+    finished = "完了済み";
+  }
+
   let specified_times = ``;
   let number_of_child = 0;
   for (let child of selected_task.task_children) {
@@ -86,6 +91,10 @@ if (selected_task) {
   }
 
   detail_container.innerHTML = `
+    <div class="add_task__item">
+    ${finished}
+    </div>
+
     <div class="add_task__item">
     <p>種類</p>
     ${plan_or_task}
@@ -164,7 +173,6 @@ if (selected_task) {
     if (window.confirm("本当に削除しますか？")) {
       selected_task.valid = false;
       firebase_send(all_tasks);
-      // window.location.href = '../constructor/index.html';
     }
   });
 

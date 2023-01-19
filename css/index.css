@@ -44,6 +44,12 @@ header button a {
     color: #66A1FF;
 }
 
+main {
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;
+}
+
 .main_content {
     padding: 25px 30px;
 }
@@ -63,25 +69,34 @@ header button a {
     color: #66A1FF;
 }
 
-.task_container {
-    cursor: pointer;
-    background-color: #E0EDFF;
-    width: 80%;
-    padding: 16px 25px;
-    margin-top: 10px;
-    border-radius: 8px;
-    position: relative;
+h2 {
+    font-size: 16px;
+    letter-spacing: 1px;
+    font-weight: 100;
+    color: #66A1FF;
+    margin-top: 25px;
 }
 
-.task_container:hover {
-    background-color: #eff6ff;
+.task_container_container {
+    position: relative;
+    margin-top: 10px;
+    border-radius: 8px;
+}
+
+.task_container_container:hover {
+    filter: brightness(104%) !important;
+}
+
+.task_container {
+    cursor: pointer;
+    padding: 16px 25px 16px 45px;
 }
 
 .task_container h5 {
-    cursor: pointer;
     font-size: 15px;
     font-weight: 500;
     margin: 0 0 5px 0;
+    color: #4d5156;
 }
 
 .task_container p {
@@ -93,6 +108,28 @@ header button a {
 .star {
     position: absolute;
     width: 25px;
-    right:15px;
+    right: 15px;
     top: 13px;
+}
+
+.checkbox_container {
+    position: absolute;
+    top: 17px;
+    left: 17px;
+}
+
+.checkbox_finished {
+    scale: 1.4;
+    margin:0;
+}
+
+.main_content {
+    width: 340px;
+    box-sizing: border-box;
+}
+
+.calendar {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
 }

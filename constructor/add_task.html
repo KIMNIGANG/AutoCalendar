@@ -405,6 +405,15 @@
                         </div>
                     </div>
 
+                    <div id="repeat_unit_form" class="add_task__item">
+                        <p>頻度</p>
+                        <select name="repeat_unit" id="repeat_unit">
+                            <option value="null" selected>特になし</option>
+                            <option value="day">毎日</option>
+                            <option value="week">毎週</option>
+                        </select>
+                    </div>
+
                     <div class="add_task__item">
                         <p>スケジューリング設定</p>
                         <input type="checkbox" value="task_duplication" name="task_duplication"
@@ -453,9 +462,13 @@
                         </select>
                     </div>
 
+                    <br/>
+
                     <div class="add_task__item">
                         <input type="checkbox" value="favorite" name="favorite" id="favorite" />お気に入り
                     </div>
+
+                    <br/>
 
                     <button type="button" id="submit__btn">確定</button>
 

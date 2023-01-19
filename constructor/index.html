@@ -17,20 +17,28 @@
         <button id="logout_btn" class="header_item_right"><a href="login.html">ログアウト</a></button>
     </header>
 
-    <div class="main_content">
-        <div class="add_task_container">
-            <a href="add_task.html" class="add_task_link">
-                <img src="../img/plus.png" />
-                <p>タスクを追加</p>
-            </a>
+    <main>
+        <div class="main_content">
+            <div class="add_task_container">
+                <a href="add_task.html" class="add_task_link">
+                    <img src="../img/plus.png" />
+                    <p>タスクを追加</p>
+                </a>
+            </div>
+            <div id="task_list_container"></div>
+            <h2>完了済み</h2>
+            <div id="finished_task_list_container"></div>
         </div>
-        <div id="task_list_container"></div>
-    </div>
+        <div class="calendar">
+            <div id="calendar"></div>
+        </div>
+    </main>
 </body>
 
 
 <script type="module" src="../js/index.js"></script>
 <script type="module" src="../js/get_user_id.js"></script>
 <script type="module" src="../js/logout.js"></script>
+<script type="module" src="../js/class_Fullcalendar.js"></script>
 
 </html>

@@ -90,7 +90,27 @@ export function taskToArray(task) {
         }
     }
 
-    a.number_of_children= task.task_children.length;
+    a.number_of_children = task.task_children.length;
 
     return a;
+}
+
+//色変換
+export function colorChange(color) {
+    switch (color) {
+        case "red":
+            return "#EBCFD1";
+        case "orange":
+            return "#F5E3CE";
+        case "yellow":
+            return "#FDF9D8";
+        case "green":
+            return "#E2E8CD";
+        case "blue":
+            return "#E0EDFF";
+        case "purple":
+            return "#D0DFF9";
+        default:
+            return "#777777";  // 真っ黒
+    }
 }

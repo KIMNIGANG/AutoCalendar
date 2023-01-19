@@ -31,13 +31,210 @@ export class Schedule {
 
             return a.deadline < b.deadline ? -1 : 1;
         });
+
+        // 元々のtask_childrenを格納
+        var regularSchedules = [];
+        var MaxDeadline;  // 締切日の最大値
+        if (this.auto_schedule.length > 0) {
+            MaxDeadline = new Date(this.auto_schedule[this.auto_schedule.length - 1].deadline);  // 締め切りの一番遅いタスクは一番後ろにあるはず.
+            MaxDeadline.setDate(MaxDeadline.getDate() + 2);
+        }
+        else {
+            MaxDeadline = new Date();
+            MaxDeadline.setDate(MaxDeadline.getDate() + 30);
+        }
+        console.log("締め切りが一番遅いタスク：" + MaxDeadline);
+        // 定例スケジュールの格納
+        for (var i = 0; i < this.on_time.length; i++) {
+            regularSchedules.push(this.on_time[i].task_children);
+            var children = [];
+            for (const child of this.on_time[i].task_children) {
+                switch(child.repeat_unit) {
+                    case "day":
+                        var tmp = new Date();
+                        var StartDate = new Date(child.specified_time[0]);
+                        var EndDate = new Date(child.specified_time[1]);
+                        // 繰り返し予定の開始時刻
+                        var Start = new Date(
+                            tmp.getFullYear(),
+                            tmp.getMonth(),
+                            tmp.getDate(),
+                            StartDate.getHours(),
+                            StartDate.getMinutes(),
+                            StartDate.getSeconds(),
+                            StartDate.getMilliseconds()
+                        );
+                        var End;  // 繰り返し予定の終了時刻
+                        if (StartDate.getDate() != EndDate.getDate()) {
+                            // 日にちをまたいでいたら, 日にちを調整
+                            End = new Date(
+                                tmp.getFullYear(),
+                                tmp.getMonth(),
+                                tmp.getDate() + 1,
+                                EndDate.getHours(),
+                                EndDate.getMinutes(),
+                                EndDate.getSeconds(),
+                                EndDate.getMilliseconds()
+                            );
+                        }
+                        else {
+                            End = new Date(
+                                tmp.getFullYear(),
+                                tmp.getMonth(),
+                                tmp.getDate(),
+                                EndDate.getHours(),
+                                EndDate.getMinutes(),
+                                EndDate.getSeconds(),
+                                EndDate.getMilliseconds()
+                            );  
+                        }
+                        // 30日後
+                        var ThirtyDaysAfter = new Date(
+                            tmp.getFullYear(),
+                            tmp.getMonth(),
+                            tmp.getDate() + 30,
+                            StartDate.getHours(),
+                            StartDate.getMinutes(),
+                            StartDate.getSeconds(),
+                            StartDate.getMilliseconds()
+                        );
+                        while (tmp.getTime() <= ThirtyDaysAfter.getTime() || tmp.getTime() < MaxDeadline.getTime()) {  
+                            // 締め切り前の定例予定を全て入れる (ただし, 30日後までは最低限入れておく.) 
+                            var new_task = new Task(
+                                child.id,
+                                child.name,
+                                child.category,
+                                child.overview,
+                                child.favorite,
+                                child.plan_or_task,
+                                child.finished,
+                                child.duplicate,
+                                child.deadline,
+                                child.required_time,
+                                child.days,
+                                child.auto_scheduled,
+                                [Start.getTime(), End.getTime()],
+                                -1,
+                                child.repeat_unit,
+                                child.importance,
+                                child.place,
+                                child.color,
+                                child.valid
+                            );
+                            children.push(new_task);
+                            Start.setDate(Start.getDate() + 1);
+                            End.setDate(End.getDate() + 1);
+                            tmp.setDate(tmp.getDate() + 1);
+                        }
+                        break;
+                    case "week":
+                        var tmp = new Date();
+                        var StartDate = new Date(child.specified_time[0]);
+                        var EndDate = new Date(child.specified_time[1]);
+                        // 繰り返す曜日を取得
+                        while (tmp.getDay() != StartDate.getDay()) {
+                            tmp.setDate(tmp.getDate() + 1);
+                        } 
+                        // 繰り返し予定の開始時刻
+                        var Start = new Date(
+                            tmp.getFullYear(),
+                            tmp.getMonth(),
+                            tmp.getDate(),
+                            StartDate.getHours(),
+                            StartDate.getMinutes(),
+                            StartDate.getSeconds(),
+                            StartDate.getMilliseconds()
+                        );
+                        var End;  // 繰り返し予定の終了時刻
+                        if (StartDate.getDate() != EndDate.getDate()) {
+                            // 日にちをまたいでいたら, 日にちを調整
+                            End = new Date(
+                                tmp.getFullYear(),
+                                tmp.getMonth(),
+                                tmp.getDate() + 1,
+                                EndDate.getHours(),
+                                EndDate.getMinutes(),
+                                EndDate.getSeconds(),
+                                EndDate.getMilliseconds()
+                            );
+                        }
+                        else {
+                            End = new Date(
+                                tmp.getFullYear(),
+                                tmp.getMonth(),
+                                tmp.getDate(),
+                                EndDate.getHours(),
+                                EndDate.getMinutes(),
+                                EndDate.getSeconds(),
+                                EndDate.getMilliseconds()
+                            );  
+                        }
+                        // 1ヶ月後 
+                        var MonthAfter = new Date(
+                            tmp.getFullYear(),
+                            tmp.getMonth() + 2,
+                            tmp.getDate(),
+                            StartDate.getHours(),
+                            StartDate.getMinutes(),
+                            StartDate.getSeconds(),
+                            StartDate.getMilliseconds()
+                        );
+                        while (tmp.getTime() <= MonthAfter.getTime() || tmp.getTime() < MaxDeadline.getTime()) {  
+                            // 締め切り前の定例予定を全て入れる (ただし, 1ヶ月後までは最低限入れておく.) 
+                            var new_task = new Task(
+                                child.id,
+                                child.name,
+                                child.category,
+                                child.overview,
+                                child.favorite,
+                                child.plan_or_task,
+                                child.finished,
+                                child.duplicate,
+                                child.deadline,
+                                child.required_time,
+                                child.days,
+                                child.auto_scheduled,
+                                [Start.getTime(), End.getTime()],
+                                -1,
+                                child.repeat_unit,
+                                child.importance,
+                                child.place,
+                                child.color,
+                                child.valid
+                            );
+                            children.push(new_task);
+                            Start.setDate(Start.getDate() + 7);
+                            End.setDate(End.getDate() + 7);
+                            tmp.setDate(tmp.getDate() + 7);
+                        }
+                        break;
+                    case "month":
+                        children.push(child);
+                        break;
+                    case "year":
+                        children.push(child);
+                        break;
+                    default:
+                        children.push(child);
+                        break;
+                }
+            }
+            this.on_time[i].task_children = children;  // 子タスクの更新
+        }
+
         var times = [];
-        for (const event of this.on_time) {
-            times.push(event.specified_time);
+        // for (const event of this.on_time) {
+        //     times.push(event.specified_time);
+        // }
+        for (var i = 0; i < this.on_time.length; i++) {
+            for (const child of this.on_time[i].task_children) {
+                times.push(child.specified_time);
+            }
         }
         times.sort(function (a, b) {
             return a[0] < b[0] ? -1 : 1;
         });
+
         for (var event of this.auto_schedule) {
             if (event.finished == true) {
                 continue;
@@ -55,9 +252,10 @@ export class Schedule {
                 for (var i = 0; i < event.task_children.length; i++) {
                     // 単位時間で分割している場合には, 個々のループを実行
                     for (; j < times.length; j++) {
-                        if (event.task_children[i].specified_time[1] <= times[j][0]) {
-                            break;
-                        }
+                        // これがあるとなぜか上手くいかないのでとりあえず削除 (芦沢)
+                        // if (event.task_children[i].specified_time[1] <= times[j][0]) {
+                        //     break;
+                        // }
                         if (
                             (times[j][0] >= event.task_children[i].specified_time[0] &&
                                 times[j][0] < event.task_children[i].specified_time[1]) || // スタートをまたいでいないか?
@@ -89,20 +287,21 @@ export class Schedule {
                             "を過ぎてしまいます."
                         );
                         console.log("警告：この予定の追加はやめといたほうがいいよ!");
-                    } else {
-                        // 締め切りの過ぎていないタスクを追加する
-                        times.splice(i, 0, event.task_children[i].specified_time);
-                        if (i + 1 < event.task_children.length) {
-                            event.task_children[i + 1].specified_time[0] =
-                                event.task_children[i].specified_time[1] + 60 * 60 * 1000; // 60分ごとに行う
-                            event.task_children[i + 1].specified_time[1] =
-                                event.task_children[i + 1].specified_time[0] +
-                                event.task_children[i + 1].required_time;
-                        }
                     }
-                    if (j > 0) {
-                        j--;
+                    // 締め切りの過ぎていないタスクを追加する
+                    times.splice(i, 0, event.task_children[i].specified_time);
+                    if (i + 1 < event.task_children.length) {
+                        event.task_children[i + 1].specified_time[0] =
+                            event.task_children[i].specified_time[1] + 60 * 60 * 1000; // 60分ごとに行う
+                        event.task_children[i + 1].specified_time[1] =
+                            event.task_children[i + 1].specified_time[0] +
+                            event.task_children[i + 1].required_time;
                     }
+                    // これがあるとなぜか上手くいかないのでとりあえず削除... (芦沢)
+                    // if (j > 0) {
+                    //     j--;
+                    // }
+                    j = 0;
                 }
             } else {
                 // 日割りする場合
@@ -150,27 +349,32 @@ export class Schedule {
                             "を過ぎてしまいます."
                         );
                         console.log("警告：この予定の追加はやめといたほうがいいよ!");
-                    } else {
-                        // 締め切りの過ぎていないタスクを追加する
-                        times.splice(i, 0, event.task_children[i].specified_time);
-                        if (i + 1 < event.task_children.length) {
-                            const tmp = new Date(event.task_children[i].specified_time[1]);
-                            event.task_children[i + 1].specified_time[0] = new Date(
-                                tmp.getFullYear(),
-                                tmp.getMonth(),
-                                tmp.getDate() + 1,
-                                8
-                            ).getTime(); // 寝る時間等を設定できたら8時になってるところを消してもよい
-                            event.task_children[i + 1].specified_time[1] =
-                                event.task_children[i + 1].specified_time[0] +
-                                event.task_children[i + 1].required_time;
-                        }
+                    }
+                    // 締め切りの過ぎていないタスクを追加する
+                    times.splice(i, 0, event.task_children[i].specified_time);
+                    if (i + 1 < event.task_children.length) {
+                        const tmp = new Date(event.task_children[i].specified_time[1]);
+                        event.task_children[i + 1].specified_time[0] = new Date(
+                            tmp.getFullYear(),
+                            tmp.getMonth(),
+                            tmp.getDate() + 1,
+                            8
+                        ).getTime(); // 寝る時間等を設定できたら8時になってるところを消してもよい
+                        event.task_children[i + 1].specified_time[1] =
+                            event.task_children[i + 1].specified_time[0] +
+                            event.task_children[i + 1].required_time;
                     }
                     if (j > 0) {
                         j--;
                     }
                 }
             }
+        }
+
+        // 格納した定例スケジュールを全てなかったことにする.
+        for (var i = 0; i < regularSchedules.length; i++) {
+            console.log(regularSchedules[i]);
+            this.on_time[i].task_children = regularSchedules[i];
         }
     }
 

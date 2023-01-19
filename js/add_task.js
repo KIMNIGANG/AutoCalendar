@@ -84,39 +84,39 @@ if (edit_page == true) {
 //main関数
 //確定ボタンが押されたときの処理
 document.getElementById("submit__btn").addEventListener("click", function () {
-    //all_tasksをaddTaskする
-    all_tasks.forEach((e) => {
-        if (edit_page == true) {
-            if (selected_task) {
-                if (e.id != selected_task.id) {
-                    user.schedule.addTask(e);
-                }
-            }
-        } else {
-            user.schedule.addTask(e);
+  //all_tasksをaddTaskする
+  all_tasks.forEach((e) => {
+    if (edit_page == true) {
+      if (selected_task) {
+        if (e.id != selected_task.id) {
+          user.schedule.addTask(e);
         }
-    });
-    //新しいタスクのデータをフォームから取得し、Taskクラスに変換
-    var new_task = get_new_task();
-    console.log(new_task);
-    //タスクの入力内容の妥当性を判断
-    if (form_check(new_task) == false) {
-        console.log("フォームエラー");
-        return;
+      }
+    } else {
+      user.schedule.addTask(e);
     }
-    //Scheduleクラスに格納
-    user.schedule.addTask(new_task);
+  });
+  //新しいタスクのデータをフォームから取得し、Taskクラスに変換
+  var new_task = get_new_task();
+  console.log(new_task);
+  //タスクの入力内容の妥当性を判断
+  if (form_check(new_task) == false) {
+    console.log("フォームエラー");
+    return;
+  }
+  //Scheduleクラスに格納
+  user.schedule.addTask(new_task);
 
-    //(KIM)Scheduleクラスのall_tasksのタスクをデータベースに格納
-    let updated_tasks = user.schedule.returnAllTasks();
-    console.log("update_task", updated_tasks);
-     firebase_send(updated_tasks, edit_page);
-    // 同期処理がダメだ
-    // if(edit_page==true){
-    //     window.location.href = '../constructor/detail.html';
-    // }else{
-    //     window.location.href = '../constructor/index.html';
-    // }
+  //(KIM)Scheduleクラスのall_tasksのタスクをデータベースに格納
+  let updated_tasks = user.schedule.returnAllTasks();
+  console.log("update_task", updated_tasks);
+  firebase_send(updated_tasks, edit_page);
+  // 同期処理がダメだ
+  // if(edit_page==true){
+  //     window.location.href = '../constructor/detail.html';
+  // }else{
+  //     window.location.href = '../constructor/index.html';
+  // }
 });
 
 //フォームチェック：入力内容に問題があればfalseを出力、メッセージを表示
@@ -157,29 +157,6 @@ function form_check(task) {
   if (task.auto_scheduled == false) {
     var error_number_2 = 0;
 
-    // for (let child of task.task_children) {
-    //     //実施時間が入力されているか、現在時刻を越えていないか
-    //     var error_number_3 = 0;
-    //     for (const time of child.specified_time) {
-    //         if (time == null) {
-    //             error_number_2 += 1;
-    //             error_number_3 += 1;
-    //         } else {
-    //             if (time < present_time) {
-    //                 error_number_2 += 1;
-    //                 error_number_3 += 1;
-    //             }
-    //         }
-    //     }
-
-    //     //実施時間の順序は正しいか
-    //     if (error_number_3 == 0) {
-    //         if (child.specified_time[0] > child.specified_time[1]) {
-    //             error_number_2 += 1;
-    //         }
-    //     }
-    // }
-
     if (task.days > 1) {
       for (const times of task.specified_time) {
         //実施時間が入力されているか、現在時刻を越えていないか
@@ -197,9 +174,12 @@ function form_check(task) {
           }
         }
 
-        //実施時間の順序は正しいか
         if (error_number_3 == 0) {
           if (times[0] > times[1]) {
+            //実施時間の順序は正しいか
+            error_number_2 += 1;
+          } else if (task.plan_or_task == 1 && times[1] > task.deadline) {
+            //実施時間は締切日を超えていないか
             error_number_2 += 1;
           }
         }
@@ -216,14 +196,17 @@ function form_check(task) {
             error_number_3 += 1;
           }
         }
-
-        //実施時間の順序は正しいか
-        if (error_number_3 == 0) {
-          if (time[0] > time[1]) {
-            error_number_2 += 1;
-          }
+      }
+      if (error_number_3 == 0) {
+        if (task.specified_time[0] > task.specified_time[1]) {
+          //実施時間の順序は正しいか
+          error_number_2 += 1;
+        } else if (task.plan_or_task == 1 && task.specified_time[1] > task.deadline) {
+          //実施時間は締切日を超えていないか
+          error_number_2 += 1;
         }
       }
+
     }
 
     //実施時間がすべて入力されている場合、それらに重複は無いか
@@ -280,12 +263,14 @@ function Plan_or_Task() {
       document.getElementById("deadline_form").style.display = "none";
       document.getElementById("len_form").style.display = "none";
       document.getElementById("auto_scheduling_form").style.display = "none";
+      document.getElementById("repeat_unit_form").style.display = "";
       document.getElementById("auto_scheduling").checked = false;
       AutoScheduling();
     } else if (Plan_or_Task == "Task") {
       document.getElementById("deadline_form").style.display = "";
       document.getElementById("len_form").style.display = "";
       document.getElementById("auto_scheduling_form").style.display = "";
+      document.getElementById("repeat_unit_form").style.display = "none";
       document.getElementById("auto_scheduling").checked = true;
       AutoScheduling();
     }
@@ -554,17 +539,17 @@ function get_new_task() {
     for (var i = 1; i < Number(a["number_of_imp_days"]) + 1; i++) {
       var imp_start_date = new Date(
         a["imp_date_" + String(i)] +
-          " " +
-          a["imp_start_hour_" + String(i)] +
-          ":" +
-          a["imp_start_minute_" + String(i)]
+        " " +
+        a["imp_start_hour_" + String(i)] +
+        ":" +
+        a["imp_start_minute_" + String(i)]
       ).getTime();
       var imp_end_date = new Date(
         a["imp_date_" + String(i)] +
-          " " +
-          a["imp_end_hour_" + String(i)] +
-          ":" +
-          a["imp_end_minute_" + String(i)]
+        " " +
+        a["imp_end_hour_" + String(i)] +
+        ":" +
+        a["imp_end_minute_" + String(i)]
       ).getTime();
       new_specified_time.push([imp_start_date, imp_end_date]);
     }
@@ -578,30 +563,30 @@ function get_new_task() {
     task_id = uuidv4();
   }
 
-    const new_task = new Task(
-        task_id,
-        a["title"],
-        a["category"],
-        a["overview"],
-        a["favorite"],
-        a["plan_or_task"],
-        false,
-        a["task_duplication"],
-        deadline_date,
-        required_time,
-        Number(a["number_of_imp_days"]),
-        a["auto_scheduling"],
-        new_specified_time,
-        Number(a["unit_time"])/60,
-        null,
-        Number(a["importance"]),
-        a["place"],
-        a["color"],
-        true
-    );
+  const new_task = new Task(
+    task_id,
+    a["title"],
+    a["category"],
+    a["overview"],
+    a["favorite"],
+    a["plan_or_task"],
+    false,
+    a["task_duplication"],
+    deadline_date,
+    required_time,
+    Number(a["number_of_imp_days"]),
+    a["auto_scheduling"],
+    new_specified_time,
+    Number(a["unit_time"]) / 60,
+    a["repeat_unit"],
+    Number(a["importance"]),
+    a["place"],
+    a["color"],
+    true
+  );
 
-    console.log(a);
-    return new_task;
+  console.log(a);
+  return new_task;
 }
 
 //キャンセルボタン
