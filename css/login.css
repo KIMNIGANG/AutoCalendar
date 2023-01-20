@@ -1,0 +1,39 @@
+body {
+    font: Noto Sans JP;
+    margin: 0;
+}
+
+.login_outer {
+    display: table;
+    width: 100%;
+    height: 100vh;
+}
+
+.login_inner {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.login_inner h1 {
+    font-size: 35px;
+    letter-spacing: 5px;
+    font-weight: 100;
+    color: #66A1FF;
+    margin: 0;
+}
+
+.login_inner button {
+    background-color: #66A1FF;
+    color: white;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    padding: 11px 22px;
+    appearance: none;
+    border-radius: 2px;
+}
+
+button:hover {
+    background-color: #aacaff;
+}

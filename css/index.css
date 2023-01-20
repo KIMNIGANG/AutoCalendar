@@ -1,0 +1,135 @@
+body {
+    font: Noto Sans JP;
+    margin: 0;
+}
+
+header {
+    display: flex;
+    align-items: center;
+    padding: 25px 30px;
+    border-bottom: solid 5px #E0EDFF;
+}
+
+header h1 {
+    font-size: 25px;
+    letter-spacing: 1px;
+    font-weight: 100;
+    color: #66A1FF;
+    margin: 0;
+}
+
+header p {
+    margin: 0 0 0 auto;
+    color: #66A1FF;
+}
+
+header button {
+    margin-left: 20px;
+    background-color: white;
+    color: white;
+    border: solid 1px #66A1FF;
+    cursor: pointer;
+    outline: none;
+    appearance: none;
+    border-radius: 2px;
+    padding: 4px 13px;
+}
+
+header button:hover {
+    background-color: #E0EDFF;
+}
+
+header button a {
+    text-decoration: none;
+    color: #66A1FF;
+}
+
+main {
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;
+}
+
+.main_content {
+    padding: 25px 30px;
+}
+
+.add_task_link {
+    text-decoration: none;
+}
+
+.add_task_link img {
+    vertical-align: middle;
+    width: 32px;
+}
+
+.add_task_link p {
+    display: inline-block;
+    vertical-align: middle;
+    color: #66A1FF;
+}
+
+h2 {
+    font-size: 16px;
+    letter-spacing: 1px;
+    font-weight: 100;
+    color: #66A1FF;
+    margin-top: 25px;
+}
+
+.task_container_container {
+    position: relative;
+    margin-top: 10px;
+    border-radius: 8px;
+}
+
+.task_container_container:hover {
+    filter: brightness(104%) !important;
+}
+
+.task_container {
+    cursor: pointer;
+    padding: 16px 25px 16px 45px;
+}
+
+.task_container h5 {
+    font-size: 15px;
+    font-weight: 500;
+    margin: 0 0 5px 0;
+    color: #4d5156;
+}
+
+.task_container p {
+    margin: 0;
+    font-size: 11px;
+    color: #A6A6A6;
+}
+
+.star {
+    position: absolute;
+    width: 25px;
+    right: 15px;
+    top: 13px;
+}
+
+.checkbox_container {
+    position: absolute;
+    top: 17px;
+    left: 17px;
+}
+
+.checkbox_finished {
+    scale: 1.4;
+    margin:0;
+}
+
+.main_content {
+    width: 340px;
+    box-sizing: border-box;
+}
+
+.calendar {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}

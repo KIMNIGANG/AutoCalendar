@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoCalender</title>
+</head>
+
+<body>
+    <div class="logged_in">
+        <header>
+            <h1>AutoCalender</h1>
+            <ul class="menu_bar">
+                <li class="menu_bar__item">
+                    <div class="menu_bar__item--title">Settings</div>
+                    <ul>
+                        <li><a href="test.html">定例スケジュール設定</a></li>
+                        <li><a href="#">自動スケジューリングの設定</a></li>
+                        <li><a href="#">授業の読み込み</a></li>
+                    </ul>
+                </li>
+                <li class="menu_ber__item">
+                    <div class="menu_bar__item--title">Help</div>
+                    <ul>
+                        <li><a href="#">AutoCalenderの使い方</a></li>
+                    </ul>
+                </li>
+                <li class="menu_ber__item--user">
+                    <div class="menu_bar__item--title">User</div>
+                    <div class="user_info">
+                        <p>石井　奏多</p>
+                        <p>ishii@gmail.com</p>
+                    </div>
+                    <div class="user_logout">
+                        <ul>
+                            <li><a href="after_login.html">ログアウト</a></li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+        </header>
+
+        <hr>
+
+        <div class="side_bar">
+            <div class="add_task--button"><a href="add_task.html">タスクを追加</a></div>
+
+            <hr>
+
+            <div class="task_list">
+                <h3>タスク一覧</h3>
+                <div class="task_list__item">
+                    <input type="checkbox" value="auto_scheduling" name="checkbox4" /><a href="detail.html">デザイン作成</a>
+                    <p>予定日：2022.11.12 12:00~18:00</p>
+                    <p>締切日：2022.11.20 12:00</p>
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="done_task_list">
+                <h3>完了済み</h3>
+                <div class="task_list__item">
+                    <a href="detail.html">デザイン作成</a>
+                    <p>予定日：2022.11.12 12:00~18:00</p>
+                    <p>締切日：2022.11.20 12:00</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+
+</html>

@@ -6,21 +6,31 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AutoCalender</title>
+    <link href="../css/add_task.css" rel="stylesheet" type="text/css" media="all">
+
 </head>
 
 <body>
     <div class="side_bar">
         <div class="add_task">
-            <form action="#" method="post">
-                <h3>新規タスク作成</h3>
-                <div class="add_task--button"><a href="index.html">キャンセル</a></div>
+            <form name="add_task__form">
+                <h3 id="title_new">新規予定・タスク作成</h3>
+                <h3 id="title_edit" style="display:none;">予定・タスク編集</h3>
+                <button type="button" id="cancel__btn">キャンセル</button>
+                <br>
+                種類：
+                <select name="plan_or_task" id="plan_or_task">
+                    <option value="Plan">予定</option>
+                    <option value="Task">タスク</option>
+                </select>
+                <hr>
                 <div class="add_task__item">
                     <p>タスク名</p>
-                    <input id="title" type="text" placeholder="入力してください"></input>
+                    <input name="title" id="title" type="text" placeholder="入力してください"></input>
                 </div>
-                <div class="add_task__item">
+                <div id="deadline_form" class="add_task__item" style="display: none;">
                     <p>締切日</p>
-                    <input id="deadline_date" type="date"></input>
+                    <input name="deadline_date" id="deadline_date" type="date"></input>
                     <select name="deadline_hour" id="deadline_hour">
                         <option value="00">00</option>
                         <option value="01">01</option>
@@ -33,7 +43,7 @@
                         <option value="08">08</option>
                         <option value="09">09</option>
                         <option value="10">10</option>
-                        <option value="11" selected>11</option>
+                        <option value="11">11</option>
                         <option value="12">12</option>
                         <option value="13">13</option>
                         <option value="14">14</option>
@@ -78,7 +88,7 @@
                         <option value="27">27</option>
                         <option value="28">28</option>
                         <option value="29">29</option>
-                        <option value="30" selected>30</option>
+                        <option value="30">30</option>
                         <option value="31">31</option>
                         <option value="32">32</option>
                         <option value="33">33</option>
@@ -110,7 +120,7 @@
                         <option value="59">59</option>
                     </select>分
                 </div>
-                <div class="add_task__item">
+                <div id="len_form" class="add_task__item" style="display: none;">
                     <p>推定予定時間</p>
                     <select name="len_hour" id="len_hour">
                         <option value="00">00</option>
@@ -124,7 +134,7 @@
                         <option value="08">08</option>
                         <option value="09">09</option>
                         <option value="10">10</option>
-                        <option value="11" selected>11</option>
+                        <option value="11">11</option>
                         <option value="12">12</option>
                         <option value="13">13</option>
                         <option value="14">14</option>
@@ -169,7 +179,7 @@
                         <option value="27">27</option>
                         <option value="28">28</option>
                         <option value="29">29</option>
-                        <option value="30" selected>30</option>
+                        <option value="30">30</option>
                         <option value="31">31</option>
                         <option value="32">32</option>
                         <option value="33">33</option>
@@ -202,213 +212,296 @@
                     </select>分
                 </div>
                 <div class="add_task__item">
-                    <p>実施予定日</p>
-                    <input type="checkbox" value="auto_scheduling" name="checkbox1" />自動でスケジューリングする
-                    <input type="checkbox" value="task_duplication" name="checkbox2" />タスクの重複を許す
-                    <input type="checkbox" value="all_day" name="checkbox3" />終日
-                    <br>
+                    <p>実施時間</p>
+                    <div id="auto_scheduling_form" style="display: none;">
+                        <input type="checkbox" value="auto_scheduling" id="auto_scheduling"
+                            name="auto_scheduling" />自動でスケジューリングする
+                    </div>
                     実施日数：
-                    <input id="number_of_imp_days" type="text" placeholder="入力してください"></input>
+                    <input name="number_of_imp_days" id="number_of_imp_days" type="number" value="1" min="1"></input>
                     <br>
-                    <input id="imp_date" type="date"></input>
+                    <div id="imp_date__form--container">
+                        <div id="imp_date__form_1" name="imp_date__form_1">
+                            <h5>実施時間1</h5>
+                            <input name="imp_date_1" type="date"></input>
+                            <br />
+                            開始：
+                            <select name="imp_start_hour_1">
+                                <option value="00">00</option>
+                                <option value="01">01</option>
+                                <option value="02">02</option>
+                                <option value="03">03</option>
+                                <option value="04">04</option>
+                                <option value="05">05</option>
+                                <option value="06">06</option>
+                                <option value="07">07</option>
+                                <option value="08">08</option>
+                                <option value="09">09</option>
+                                <option value="10">10</option>
+                                <option value="11">11</option>
+                                <option value="12">12</option>
+                                <option value="13">13</option>
+                                <option value="14">14</option>
+                                <option value="15">15</option>
+                                <option value="16">16</option>
+                                <option value="17">17</option>
+                                <option value="18">18</option>
+                                <option value="19">19</option>
+                                <option value="20">20</option>
+                                <option value="21">21</option>
+                                <option value="22">22</option>
+                                <option value="23">23</option>
+                            </select>時
+                            <select name="imp_start_minute_1">
+                                <option value="00">00</option>
+                                <option value="01">01</option>
+                                <option value="02">02</option>
+                                <option value="03">03</option>
+                                <option value="04">04</option>
+                                <option value="05">05</option>
+                                <option value="06">06</option>
+                                <option value="07">07</option>
+                                <option value="08">08</option>
+                                <option value="09">09</option>
+                                <option value="10">10</option>
+                                <option value="11">11</option>
+                                <option value="12">12</option>
+                                <option value="13">13</option>
+                                <option value="14">14</option>
+                                <option value="15">15</option>
+                                <option value="16">16</option>
+                                <option value="17">17</option>
+                                <option value="18">18</option>
+                                <option value="19">19</option>
+                                <option value="20">20</option>
+                                <option value="21">21</option>
+                                <option value="22">22</option>
+                                <option value="23">23</option>
+                                <option value="24">24</option>
+                                <option value="25">25</option>
+                                <option value="26">26</option>
+                                <option value="27">27</option>
+                                <option value="28">28</option>
+                                <option value="29">29</option>
+                                <option value="30">30</option>
+                                <option value="31">31</option>
+                                <option value="32">32</option>
+                                <option value="33">33</option>
+                                <option value="34">34</option>
+                                <option value="35">35</option>
+                                <option value="36">36</option>
+                                <option value="37">37</option>
+                                <option value="38">38</option>
+                                <option value="39">39</option>
+                                <option value="40">40</option>
+                                <option value="41">41</option>
+                                <option value="42">42</option>
+                                <option value="43">43</option>
+                                <option value="44">44</option>
+                                <option value="45">45</option>
+                                <option value="46">46</option>
+                                <option value="47">47</option>
+                                <option value="48">48</option>
+                                <option value="49">49</option>
+                                <option value="50">50</option>
+                                <option value="51">51</option>
+                                <option value="52">52</option>
+                                <option value="53">53</option>
+                                <option value="54">54</option>
+                                <option value="55">55</option>
+                                <option value="56">56</option>
+                                <option value="57">57</option>
+                                <option value="58">58</option>
+                                <option value="59">59</option>
+                            </select>分
+                            <br />
+                            終了：
+                            <select name="imp_end_hour_1">
+                                <option value="00">00</option>
+                                <option value="01">01</option>
+                                <option value="02">02</option>
+                                <option value="03">03</option>
+                                <option value="04">04</option>
+                                <option value="05">05</option>
+                                <option value="06">06</option>
+                                <option value="07">07</option>
+                                <option value="08">08</option>
+                                <option value="09">09</option>
+                                <option value="10">10</option>
+                                <option value="11">11</option>
+                                <option value="12">12</option>
+                                <option value="13">13</option>
+                                <option value="14">14</option>
+                                <option value="15">15</option>
+                                <option value="16">16</option>
+                                <option value="17">17</option>
+                                <option value="18">18</option>
+                                <option value="19">19</option>
+                                <option value="20">20</option>
+                                <option value="21">21</option>
+                                <option value="22">22</option>
+                                <option value="23">23</option>
+                            </select>時
+                            <select name="imp_end_minute_1">
+                                <option value="00">00</option>
+                                <option value="01">01</option>
+                                <option value="02">02</option>
+                                <option value="03">03</option>
+                                <option value="04">04</option>
+                                <option value="05">05</option>
+                                <option value="06">06</option>
+                                <option value="07">07</option>
+                                <option value="08">08</option>
+                                <option value="09">09</option>
+                                <option value="10">10</option>
+                                <option value="11">11</option>
+                                <option value="12">12</option>
+                                <option value="13">13</option>
+                                <option value="14">14</option>
+                                <option value="15">15</option>
+                                <option value="16">16</option>
+                                <option value="17">17</option>
+                                <option value="18">18</option>
+                                <option value="19">19</option>
+                                <option value="20">20</option>
+                                <option value="21">21</option>
+                                <option value="22">22</option>
+                                <option value="23">23</option>
+                                <option value="24">24</option>
+                                <option value="25">25</option>
+                                <option value="26">26</option>
+                                <option value="27">27</option>
+                                <option value="28">28</option>
+                                <option value="29">29</option>
+                                <option value="30">30</option>
+                                <option value="31">31</option>
+                                <option value="32">32</option>
+                                <option value="33">33</option>
+                                <option value="34">34</option>
+                                <option value="35">35</option>
+                                <option value="36">36</option>
+                                <option value="37">37</option>
+                                <option value="38">38</option>
+                                <option value="39">39</option>
+                                <option value="40">40</option>
+                                <option value="41">41</option>
+                                <option value="42">42</option>
+                                <option value="43">43</option>
+                                <option value="44">44</option>
+                                <option value="45">45</option>
+                                <option value="46">46</option>
+                                <option value="47">47</option>
+                                <option value="48">48</option>
+                                <option value="49">49</option>
+                                <option value="50">50</option>
+                                <option value="51">51</option>
+                                <option value="52">52</option>
+                                <option value="53">53</option>
+                                <option value="54">54</option>
+                                <option value="55">55</option>
+                                <option value="56">56</option>
+                                <option value="57">57</option>
+                                <option value="58">58</option>
+                                <option value="59">59</option>
+                            </select>分<br />
+                        </div>
+                    </div>
+
+                    <div id="repeat_unit_form" class="add_task__item">
+                        <p>頻度</p>
+                        <select name="repeat_unit" id="repeat_unit">
+                            <option value="null" selected>特になし</option>
+                            <option value="day">毎日</option>
+                            <option value="week">毎週</option>
+                        </select>
+                    </div>
+
+                    <div class="add_task__item">
+                        <p>スケジューリング設定</p>
+                        <input type="checkbox" value="task_duplication" name="task_duplication"
+                            id="task_duplication" />タスクの重複を許す
+                        <br>
+                        <div id="auto_scheduling_true" style="display: none;">
+                            重要度：
+                            <select name="importance" id="importance">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                            <br>
+                            分割する時間の単位：
+                            <!-- <input name="unit_time" id="unit_time" type="number" value="30" min="1"></input>分 -->
+                            <select name="unit_time" id="unit_time">
+                                <option value="1440" selected>指定なし</option>
+                                <option value="10">10分</option>
+                                <option value="15">15分</option>
+                                <option value="30">30分</option>
+                                <option value="60">1時間</option>
+                                <option value="90">1時間半</option>
+                                <option value="120">2時間</option>
+                                <option value="150">2時間半</option>
+                                <option value="180">3時間</option>
+                                <option value="240">4時間</option>
+                                <option value="300">5時間</option>
+                                <option value="360">6時間</option>
+                                <option value="420">7時間</option>
+                                <option value="480">8時間</option>
+                                <option value="540">9時間</option>
+                                <option value="600">10時間</option>
+                            </select>
+                        </div>
+                    </div>
+
+
+                    <div class="add_task__item">
+                        <p>概要</p>
+                        <textarea name="overview" id="overview" placeholder="入力してください"></textarea>
+                    </div>
+
+                    <div class="add_task__item">
+                        <p>カテゴリ</p>
+                        <input name="category" id="category" type="text" placeholder="入力してください"></input>
+                    </div>
+
+                    <div class="add_task__item">
+                        <p>場所</p>
+                        <input name="place" id="place" type="text" placeholder="入力してください"></input>
+                    </div>
+
+                    <div class="add_task__item">
+                        <p>色</p>
+                        <select name="color" id="color">
+                            <option value="red">red</option>
+                            <option value="orange">orange</option>
+                            <option value="yellow">yellow</option>
+                            <option value="green">green</option>
+                            <option value="blue" selected>blue</option>
+                            <option value="purple">purple</option>
+                        </select>
+                    </div>
+
                     <br />
-                    開始：
-                    <select id="imp_start_hour">
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                        <option value="6">6</option>
-                        <option value="7">7</option>
-                        <option value="8">8</option>
-                        <option value="9">9</option>
-                        <option value="10">10</option>
-                        <option value="11" selected="selected">11</option>
-                        <option value="12">12</option>
-                        <option value="13">13</option>
-                        <option value="14">14</option>
-                        <option value="15">15</option>
-                        <option value="16">16</option>
-                        <option value="17">17</option>
-                        <option value="18">18</option>
-                        <option value="19">19</option>
-                        <option value="20">20</option>
-                        <option value="21">21</option>
-                        <option value="22">22</option>
-                        <option value="23">23</option>
-                    </select>時
-                    <select id="imp_start_minute">
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                        <option value="6">6</option>
-                        <option value="7">7</option>
-                        <option value="8">8</option>
-                        <option value="9">9</option>
-                        <option value="10">10</option>
-                        <option value="11">11</option>
-                        <option value="12">12</option>
-                        <option value="13">13</option>
-                        <option value="14">14</option>
-                        <option value="15">15</option>
-                        <option value="16">16</option>
-                        <option value="17">17</option>
-                        <option value="18">18</option>
-                        <option value="19">19</option>
-                        <option value="20">20</option>
-                        <option value="21">21</option>
-                        <option value="22">22</option>
-                        <option value="23">23</option>
-                        <option value="24">24</option>
-                        <option value="25">25</option>
-                        <option value="26">26</option>
-                        <option value="27">27</option>
-                        <option value="28">28</option>
-                        <option value="29">29</option>
-                        <option value="30" selected="selected">30</option>
-                        <option value="31">31</option>
-                        <option value="32">32</option>
-                        <option value="33">33</option>
-                        <option value="34">34</option>
-                        <option value="35">35</option>
-                        <option value="36">36</option>
-                        <option value="37">37</option>
-                        <option value="38">38</option>
-                        <option value="39">39</option>
-                        <option value="40">40</option>
-                        <option value="41">41</option>
-                        <option value="42">42</option>
-                        <option value="43">43</option>
-                        <option value="44">44</option>
-                        <option value="45">45</option>
-                        <option value="46">46</option>
-                        <option value="47">47</option>
-                        <option value="48">48</option>
-                        <option value="49">49</option>
-                        <option value="50">50</option>
-                        <option value="51">51</option>
-                        <option value="52">52</option>
-                        <option value="53">53</option>
-                        <option value="54">54</option>
-                        <option value="55">55</option>
-                        <option value="56">56</option>
-                        <option value="57">57</option>
-                        <option value="58">58</option>
-                        <option value="59">59</option>
-                    </select>分
+
+                    <div class="add_task__item">
+                        <input type="checkbox" value="favorite" name="favorite" id="favorite" />お気に入り
+                    </div>
+
                     <br />
-                    終了：
-                    <select id="imp_end_hour">
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                        <option value="6">6</option>
-                        <option value="7">7</option>
-                        <option value="8">8</option>
-                        <option value="9">9</option>
-                        <option value="10">10</option>
-                        <option value="11" selected="selected">11</option>
-                        <option value="12">12</option>
-                        <option value="13">13</option>
-                        <option value="14">14</option>
-                        <option value="15">15</option>
-                        <option value="16">16</option>
-                        <option value="17">17</option>
-                        <option value="18">18</option>
-                        <option value="19">19</option>
-                        <option value="20">20</option>
-                        <option value="21">21</option>
-                        <option value="22">22</option>
-                        <option value="23">23</option>
-                    </select>時
-                    <select id="imp_end_minute">
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                        <option value="6">6</option>
-                        <option value="7">7</option>
-                        <option value="8">8</option>
-                        <option value="9">9</option>
-                        <option value="10">10</option>
-                        <option value="11">11</option>
-                        <option value="12">12</option>
-                        <option value="13">13</option>
-                        <option value="14">14</option>
-                        <option value="15">15</option>
-                        <option value="16">16</option>
-                        <option value="17">17</option>
-                        <option value="18">18</option>
-                        <option value="19">19</option>
-                        <option value="20">20</option>
-                        <option value="21">21</option>
-                        <option value="22">22</option>
-                        <option value="23">23</option>
-                        <option value="24">24</option>
-                        <option value="25">25</option>
-                        <option value="26">26</option>
-                        <option value="27">27</option>
-                        <option value="28">28</option>
-                        <option value="29">29</option>
-                        <option value="30" selected="selected">30</option>
-                        <option value="31">31</option>
-                        <option value="32">32</option>
-                        <option value="33">33</option>
-                        <option value="34">34</option>
-                        <option value="35">35</option>
-                        <option value="36">36</option>
-                        <option value="37">37</option>
-                        <option value="38">38</option>
-                        <option value="39">39</option>
-                        <option value="40">40</option>
-                        <option value="41">41</option>
-                        <option value="42">42</option>
-                        <option value="43">43</option>
-                        <option value="44">44</option>
-                        <option value="45">45</option>
-                        <option value="46">46</option>
-                        <option value="47">47</option>
-                        <option value="48">48</option>
-                        <option value="49">49</option>
-                        <option value="50">50</option>
-                        <option value="51">51</option>
-                        <option value="52">52</option>
-                        <option value="53">53</option>
-                        <option value="54">54</option>
-                        <option value="55">55</option>
-                        <option value="56">56</option>
-                        <option value="57">57</option>
-                        <option value="58">58</option>
-                        <option value="59">59</option>
-                    </select>分<br />
-                </div>
-                <div class="add_task__item">
-                    <p>概要</p>
-                    <textarea id="overview" placeholder="入力してください"></textarea>
+
+                    <button type="button" id="submit__btn">確定</button>
+
+
+                    <div id="error_messages_container"></div>
                 </div>
 
-                <div class="add_task__item">
-                    <p>カテゴリ</p>
-                    <input id="category" type="text" placeholder="入力してください"></input>
-                </div>
-
-                <div class="add_task__item">
-                    <input type="checkbox" value="like" name="checkbox4" />お気に入り
-                </div>
-
-                <input type="submit" value="追加" />
             </form>
         </div>
     </div>
 
-    </div>
-
 </body>
+<script type="module" src="../js/add_task.js"></script>
+<script type="module" src="../js/data_send.js"></script>
 
 </html>

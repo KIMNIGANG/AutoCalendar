@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>AutoCalender</title>
+</head>
+<body>
+    <div id = "container"></div>
+    予定
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    &nbsp;&nbsp;&nbsp;&nbsp;&thinsp;
+    予定
+    <br/>
+    <input type="text" id="addText" />  <!-- 追加する予定 -->
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    &nbsp;&nbsp;&nbsp;
+    <input type="text" id="removeText" />  <!-- 削除する予定 -->
+    <br/>
+    <br/>
+    期限
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    &nbsp;&nbsp;&nbsp;&thinsp;&thinsp;&thinsp;
+    <button id = "removeButton"> 削除 </button>
+    <br/>
+    <select id = "deadDaySelect"> <!-- 追加する予定の締切日 -->
+        <option value = "0"> 今日 </option>
+        <option value = "1"> 明日 </option>
+        <option value = "2"> 明後日 </option>
+        <option value = "3"> 3日後 </option>
+        <option value = "4"> 4日後 </option>
+    </select>
+    <select id = "deadTimeSelect"> <!-- 追加する予定の締め切り時間 -->
+        <option value = "0"> 正午まで </option>
+        <option value = "1"> 終わりまで </option>
+    </select>
+    <br/>
+    優先度
+    <br/>
+    <select id = "prioritySelect"> <!-- 追加する予定の優先度 -->
+        <option value = "0"> 1 </option>
+        <option value = "1"> 2 </option>
+        <option value = "2" selected = "selected"> 3 </option>
+        <option value = "3"> 4 </option>
+        <option value = "4"> 5 </option>
+    </select> 
+    <br/>
+    <br/>
+    <button id = "addButton"> 追加 </button>
+    <br/>
+    <br/>
+</body>
+<script>
+    var cvs = document.createElement("canvas");
+    cvs.width = 500;
+    cvs.height = 400;
+    document.getElementById("container").appendChild(cvs);
+    var ctx = cvs.getContext("2d");
+
+    var d = new Date();
+    var monthBase = d.getMonth() + 1;
+    if (monthBase > 12) {
+        monthBase = 1;
+    }
+    // 5日分の予定を表示
+    var dateBase = d.getDate();
+
+    function Unit(label, priority) {
+        var me = this;
+
+        this.label = label;
+        this.priority = priority;
+    }
+
+    var scheduleLimitNum = 2;  // 各日時における予定の上限
+
+    schedules = [];  // 予定を格納するためのリスト(日時と時間を考慮)
+
+    // (0: 今日の午前, 1: 今日の午後, 2: 明日の午前, ... , 9: 4日後の午後)
+    for (var i = 0; i < 10; i++) {
+        schedules.push([]);
+    }
+
+    var addText = document.getElementById("addText");
+    var prioritySelect = document.getElementById("prioritySelect");
+    var removeText = document.getElementById("removeText");
+    var deadDaySelect = document.getElementById("deadDaySelect");
+    var deadTimeSelect = document.getElementById("deadTimeSelect");
+
+    var addButton = document.getElementById("addButton");
+    var removeButton = document.getElementById("removeButton");
+
+    render();
+
+    addButton.addEventListener("click", function(e) {
+        if (addText.value == "") {  // (一文字も入っていない場合) 
+            alert("追加する予定を入力してください");
+        }
+        else {
+            var options_priority = prioritySelect.options;  // 優先度のoptionの一覧（配列）を取得 
+            var index_priority = prioritySelect.selectedIndex;  // 選択されている項目の番号（0オリジン）を取得
+            var selectedOption_priority = options_priority[index_priority];  // 選択されているoptionを取得
+            var priority = parseInt(selectedOption_priority.value);  // 優先度を取得
+
+            var options_day = deadDaySelect.options;
+            var index_day = deadDaySelect.selectedIndex;
+            var selectedOption_day = options_day[index_day];
+            var deadDay = parseInt(selectedOption_day.value);  // 0 ～ 4
+
+            var options_time = deadTimeSelect.options;
+            var index_time = deadTimeSelect.selectedIndex;
+            var selectedOption_time = options_time[index_time];
+            var deadTime = parseInt(selectedOption_time.value);  // 0 or 1
+            
+            // 優先度を考慮した予定の挿入
+            var unit = new Unit(addText.value, priority);
+            var schedulesIndex = deadDay * 2 + deadTime;
+            var oneSchedule = schedules[schedulesIndex];  // どこかの日時
+            if (oneSchedule.length == 0) { // 一個も入っていない場合にはそのまま追加 
+                oneSchedule.push(unit);
+            }
+            else {
+                var sliceDone = false;  // 挿入が終わったかどうかの判断
+                var loopNum = oneSchedule.length;  // oneSchedule内の要素数は増加する可能性があるので, この値は保存しておく必要がある.
+                for (var i = 0; i < loopNum; i++) {
+                    if (unit.priority > oneSchedule[i].priority) {
+                        oneSchedule.splice(i, 0, unit);
+                        sliceDone = true;
+                    }
+                    else {
+                        if (i == oneSchedule.length - 1) {
+                            oneSchedule.push(unit);  // 末尾に追加
+                        }
+                    } 
+                    if (sliceDone) {  // 一回挿入したらループを抜ける
+                        break;
+                    }
+                }
+            }
+            
+            schedules[schedulesIndex] = oneSchedule;  // 置き換え
+
+            // 予定が表示できない量だけ存在していたら、配置換えをする.
+            // (後で良いと考えられる予定は排除)
+            // (ここでは, 日付が速い程優先度が高いと考える.)
+            // (だが, 今の段階では考慮しきれていない...) -> (一つ一つ優先度を見ていく必要がある.)
+            // (むしろ, 一個一個入力されたたびにスケジュールを表示するのではなく, 全て入力されてから表示した方が良いのかもしれない.)
+            if (schedules[schedulesIndex].length > scheduleLimitNum) {
+                var tmp = schedules[schedulesIndex].pop();
+                var i = schedulesIndex + 1;
+                // 一つずつずらしていく
+                while (i < schedules.length - 1 && schedules[i].length >= scheduleLimitNum) {
+                    schedules[i].unshift(tmp);
+                    tmp = schedules[i].pop();
+                    i++;
+                }
+                schedules[i].unshift(tmp);
+                if (schedules[i].length > scheduleLimitNum) {
+                    schedules[i].pop();  // 最後までさかのぼっても入りきらなかった場合には削除
+                }
+            }
+
+            render();
+
+            addText.value = "";
+        }
+    });
+
+    removeButton.addEventListener("click", function(e) {
+        // (この方法だと, 時間をまたいで予定を詰めることができない...)
+        var removeLabel = removeText.value;
+        var removeDone = false;  // 削除が終わったかどうかの判断
+        var loopNum = schedules.length;
+        for (var i = loopNum - 1; i >= 0; i--) {
+            for (var j = schedules[i].length - 1; j >= 0; j--) {
+                if (schedules[i][j].label == removeLabel) {
+                    schedules[i].splice(j, 1);
+                    removeDone = true;
+                }
+                if (removeDone) {  // 一回挿入したらループを抜ける
+                    break;
+                }
+            }
+            if (removeDone) {  // 一回挿入したらループを抜ける
+                break;
+            }
+        }
+        if (!removeDone) {
+            alert("「" + removeLabel + "」は予定には含まれていません.");
+        }
+        removeText.value = "";
+        render();
+    });
+
+    function render() {
+        ctx.clearRect(0, 0, 500, 500);  // 描画内容をリセット
+
+        ctx.fillStyle = "black";
+        ctx.strokeStyle = "black";
+        ctx.lineWidth = 1;
+
+        ctx.font = "bold 10pt sans-serif";
+        // (何故かこの文字列の位置が最初だけずれる...)
+        ctx.fillText("最適な予定（５日間）", 0, 20);
+
+        ctx.textBaseline = "middle";
+
+        for (var i = 0; i < 5; i++) {
+            var month = monthBase;
+            var date = dateBase;
+            switch (month) {
+                case 2:
+                    var lastday = 28;
+                    break;
+                case 4, 6, 9, 11:
+                    var lastday = 30;
+                    break;
+                case 1, 3, 5, 7, 8, 10, 12:
+                    var lastday = 31;
+                    break;
+                default:
+                    console.log("月の設定が間違っています!");
+                    break;
+            }
+            if (date + i > lastday) {
+                date = date + i - lastday;
+                month += 1;
+                if (month > 12) {
+                    month = 1;
+                }
+            }
+            else {
+                date = date + i;
+            }
+            ctx.fillText(month + "/" + date, 20 + 100 * i, 50);
+        }
+
+        // 午前中・午後に分ける（それぞれ二つずつまで入れる）
+        ctx.font = "bold 10pt sans-serif";
+        for (var i = 0; i < 5; i++) {
+            ctx.fillText("午前", 100 * i, 80);
+            ctx.fillText("午後", 100 * i, 250);
+        }
+
+        
+        for (var i = 0; i < 5; i++) {
+            for (var j = 0; j < scheduleLimitNum; j++) {
+                ctx.fillText((j + 1) + ".", 100 * i, 100 + 70 * j);
+                ctx.fillText((j + 1) + ".", 100 * i, 270 + 70 * j);
+            }
+        }
+
+        ctx.font = "10pt sans-serif";
+
+        // 予定を表すラベルの描画
+        for (var i = 0; i < schedules.length; i++) {
+            for (var j = 0; j < schedules[i].length; j++) {
+                ctx.fillText(schedules[i][j].label, 5 + 100 * Math.floor(i / 2), 125 + 170 * (i % 2) + 70 * j);
+            }
+        }
+    }
+
+</script>
+</html>
