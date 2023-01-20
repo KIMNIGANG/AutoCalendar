@@ -37,17 +37,17 @@ for (const task of all_tasks) {
             `;
 
     console.log(task.task_children[task.task_children.length - 1]);
-    
+
     // 締め切りを過ぎたタスクがどれかを分かるようにする.
     if (task.deadline != null) {
-      if (task.task_children[task.task_children.length - 1].specified_time[1] > task.deadline) {
+      if (task.task_children[task.task_children.length - 1].specified_time[1] > task.deadline && task.finished == false) {
         task_container.innerHTML += `
             <h5> (締め切り過ぎたタスク) </h5>
                 `;
         deadlineOver = true;
       }
     }
-    
+
 
     console.log(task.name + " " + task.color);
 
@@ -110,9 +110,9 @@ for (const task of all_tasks) {
           case "month":
             break;
           case "year":
-              break;
+            break;
           default:
-              break;
+            break;
         }
       }
     }
@@ -121,7 +121,7 @@ for (const task of all_tasks) {
         ++number_of_child;
         let time_0 = timestampToDisplay(child.specified_time[0]);
         let time_1 = timestampToDisplay(child.specified_time[1]);
-  
+
         task_container.innerHTML += `
         <p>実施日${number_of_child}：${time_0}~${time_1}</p>
               `;
@@ -178,7 +178,12 @@ for (const task of all_tasks) {
         } else {
           task.finished = false;
         }
-        firebase_send(all_tasks);
+        //もう一度スケジューリング
+        all_tasks.forEach((e) => {
+          user.schedule.addTask(e);
+        });
+        let updated_tasks = user.schedule.returnAllTasks();
+        firebase_send(updated_tasks);
       });
   }
 }
@@ -187,7 +192,7 @@ for (const task of all_tasks) {
 // スケジュールの変更を促す.
 // (果たして, このやり方でユーザは満足するだろうか...)
 if (deadlineOver) {
-     alert("締め切りを過ぎたタスクがあります!!" + "\n" + "タスクの変更をしましょう!!");
+  alert("締め切りを過ぎたタスクがあります!!" + "\n" + "タスクの変更をしましょう!!");
 }
 
 // //完了処理
