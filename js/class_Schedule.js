@@ -52,6 +52,7 @@ export class Schedule {
                 switch(child.repeat_unit) {
                     case "day":
                         var tmp = new Date();
+                        tmp.setDate(tmp.getDate() - 7);  // 1週間分余計に取る
                         var StartDate = new Date(child.specified_time[0]);
                         var EndDate = new Date(child.specified_time[1]);
                         // 繰り返し予定の開始時刻
@@ -129,6 +130,7 @@ export class Schedule {
                         break;
                     case "week":
                         var tmp = new Date();
+                        tmp.setDate(tmp.getDate() - 7);  // 1週間分余計に取る
                         var StartDate = new Date(child.specified_time[0]);
                         var EndDate = new Date(child.specified_time[1]);
                         // 繰り返す曜日を取得
@@ -169,10 +171,10 @@ export class Schedule {
                                 EndDate.getMilliseconds()
                             );  
                         }
-                        // 1ヶ月後 
+                        // 2ヶ月後 
                         var MonthAfter = new Date(
                             tmp.getFullYear(),
-                            tmp.getMonth() + 2,
+                            tmp.getMonth() + 3,
                             tmp.getDate(),
                             StartDate.getHours(),
                             StartDate.getMinutes(),
@@ -252,10 +254,9 @@ export class Schedule {
                 for (var i = 0; i < event.task_children.length; i++) {
                     // 単位時間で分割している場合には, 個々のループを実行
                     for (; j < times.length; j++) {
-                        // これがあるとなぜか上手くいかないのでとりあえず削除 (芦沢)
-                        // if (event.task_children[i].specified_time[1] <= times[j][0]) {
-                        //     break;
-                        // }
+                        if (event.task_children[i].specified_time[1] <= times[j][0]) {
+                            break;
+                        }
                         if (
                             (times[j][0] >= event.task_children[i].specified_time[0] &&
                                 times[j][0] < event.task_children[i].specified_time[1]) || // スタートをまたいでいないか?
@@ -289,7 +290,7 @@ export class Schedule {
                         console.log("警告：この予定の追加はやめといたほうがいいよ!");
                     }
                     // 締め切りの過ぎていないタスクを追加する
-                    times.splice(i, 0, event.task_children[i].specified_time);
+                    times.splice(j, 0, event.task_children[i].specified_time);
                     if (i + 1 < event.task_children.length) {
                         event.task_children[i + 1].specified_time[0] =
                             event.task_children[i].specified_time[1] + 60 * 60 * 1000; // 60分ごとに行う
@@ -297,11 +298,9 @@ export class Schedule {
                             event.task_children[i + 1].specified_time[0] +
                             event.task_children[i + 1].required_time;
                     }
-                    // これがあるとなぜか上手くいかないのでとりあえず削除... (芦沢)
-                    // if (j > 0) {
-                    //     j--;
-                    // }
-                    j = 0;
+                    if (j > 0) {
+                        j--;
+                    }
                 }
             } else {
                 // 日割りする場合
@@ -351,15 +350,15 @@ export class Schedule {
                         console.log("警告：この予定の追加はやめといたほうがいいよ!");
                     }
                     // 締め切りの過ぎていないタスクを追加する
-                    times.splice(i, 0, event.task_children[i].specified_time);
+                    times.splice(j, 0, event.task_children[i].specified_time);
                     if (i + 1 < event.task_children.length) {
                         const tmp = new Date(event.task_children[i].specified_time[1]);
                         event.task_children[i + 1].specified_time[0] = new Date(
                             tmp.getFullYear(),
                             tmp.getMonth(),
                             tmp.getDate() + 1,
-                            8
-                        ).getTime(); // 寝る時間等を設定できたら8時になってるところを消してもよい
+                            0
+                        ).getTime(); // 寝る時間等を設定できたら8時になってるところを消してもよい (← 消した)
                         event.task_children[i + 1].specified_time[1] =
                             event.task_children[i + 1].specified_time[0] +
                             event.task_children[i + 1].required_time;
