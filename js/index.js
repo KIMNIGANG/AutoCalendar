@@ -197,6 +197,16 @@ if (deadlineOver) {
   alert("締め切りを過ぎたタスクがあります!!" + "\n" + "タスクの変更をしましょう!!");
 }
 
+console.log(all_tasks);
+
+for (const task of all_tasks) {
+  console.log(task.name + "のrequired_time = " + task.required_time);
+  for (const child of task.task_children) {
+    console.log("child：" + child.name + "のrequired_time = " + child.required_time);
+    console.log("child：" + child.name + "のunit_time = " + child.unit_time);
+  }
+}
+
 // //完了処理
 // for (const task of all_tasks) {
 //   if (task.valid == true) {

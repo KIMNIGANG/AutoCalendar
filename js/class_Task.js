@@ -91,7 +91,7 @@ export class Task {
                         finished,
                         duplicate,
                         deadline,
-                        required_time,
+                        required_time / (this.specified_time.length),
                         1,
                         false,
                         tmp,
@@ -225,6 +225,7 @@ export class Task {
                 var count = 0;
                 while (remain_time > 0) {
                     // 分割出来るだけ分割
+                    console.log("required_time = " + Math.min(unit_time, remain_time / (60 * 60 * 1000)));
                     var child = new Task(
                         id,
                         name,
