@@ -25,6 +25,12 @@ if (submitButton != null) {
         // The signed-in user info.
         const user = result.user;
         // ...
+              const uid = user.uid;
+        const name = user.displayName;
+        const email = user.email;
+        localStorage.setItem("uid", uid);
+        localStorage.setItem("email", email);
+        localStorage.setItem("name", name);
       })
       .catch((error) => {
         // Handle Errors here.
