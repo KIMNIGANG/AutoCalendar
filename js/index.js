@@ -134,6 +134,8 @@ for (const task of all_tasks) {
       }
     }
 
+    console.log(task.name + " " + task.unit_time);
+
     task_container_container.style.backgroundColor = colorChange(task.color);
     task_container_container.appendChild(task_container);
 

@@ -282,7 +282,7 @@ document.getElementById("auto_scheduling").onchange = AutoScheduling;
 function AutoScheduling() {
   if (document.getElementById("auto_scheduling").checked === true) {
     document.getElementById("auto_scheduling_true").style.display = "";
-    document.getElementById("number_of_imp_days").onchange = "";
+    document.getElementById("number_of_imp_days").onchange = UnitTimeSplit;
     document.getElementById("imp_date__form--container").innerHTML = "";
   } else {
     document.getElementById("auto_scheduling_true").style.display = "none";
@@ -486,6 +486,16 @@ function CreatingForm() {
     document
       .getElementById("imp_date__form--container")
       .appendChild(imp_date__form);
+  }
+}
+
+//フォームの動的化：実施日数が1日の時だけ単位時間分割用フォームを作成
+function UnitTimeSplit() {
+  if (Number(document.getElementById("number_of_imp_days").value) == 1) {  // (日割りしない場合)
+    document.getElementById("unit_time").style.display = "";
+  } else {
+    document.getElementById("unit_time").style.display = "none";
+    document.getElementById("unit_time").value = "1440";  // (初期化)
   }
 }
 

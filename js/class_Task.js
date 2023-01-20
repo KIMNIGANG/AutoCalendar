@@ -171,6 +171,7 @@ export class Task {
             // unit_time = 0.5
             // days = 5
             // 日割りするときの処理
+            var unit = 0.5;  // (30分, 固定時間)
             if (this.days > 1) {
                 // daysが指定されたときは最大daysの分のchildを作成
                 for (var i = 0; i < this.days; i++) {
@@ -184,7 +185,8 @@ export class Task {
                         finished,
                         duplicate,
                         deadline,
-                        Math.min(unit_time, remain_time / (60 * 60 * 1000)),
+                        Math.min(unit, remain_time / (60 * 60 * 1000)),
+                        // Math.min(unit_time, remain_time / (60 * 60 * 1000)),
                         1,
                         auto_scheduled,
                         null,
@@ -197,7 +199,8 @@ export class Task {
                     );
                     child.name = child.name + "(" + (i + 1) + "日目)"; // 線形代数(1日目)みたいな名前にする
                     this.task_children.push(child);
-                    remain_time -= this.unit_time;
+                    remain_time -= unit * 60 * 60 * 1000;
+                    // remain_time -= this.unit_time;
                     if (remain_time <= 0) break;
                 }
                 // (上の実行例に対応)
@@ -205,8 +208,10 @@ export class Task {
                 var day = 0;
                 while (remain_time > 0) {
                     // 開始時刻の早いタスクから順に残りの所要時間を均等に上乗せ
-                    this.task_children[day].required_time += this.unit_time;
-                    remain_time -= this.unit_time;
+                    this.task_children[day].required_time += unit * 60 * 60 * 1000;
+                    remain_time -= unit * 60 * 60 * 1000;
+                    // this.task_children[day].required_time += this.unit_time;
+                    // remain_time -= this.unit_time;
                     day++;
                     if (day == this.days) {
                         // 繰り返すため
@@ -246,6 +251,29 @@ export class Task {
                     remain_time -= this.unit_time;
                     count++;
                 }
+                // (以下は分割しない場合)
+                // var child = new Task(
+                //     id,
+                //     name,
+                //     category,
+                //     overview,
+                //     favorite,
+                //     plan_or_task,
+                //     finished,
+                //     duplicate,
+                //     deadline,
+                //     remain_time,
+                //     1,
+                //     auto_scheduled,
+                //     null,
+                //     -1,
+                //     repeat_unit,
+                //     importance,
+                //     place,
+                //     color,
+                //     false
+                // );
+                // this.task_children.push(child);
             }
         }
     }
