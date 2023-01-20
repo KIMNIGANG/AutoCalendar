@@ -6,13 +6,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AutoCalender</title>
+    <link href="../css/add_task.css" rel="stylesheet" type="text/css" media="all">
+
 </head>
 
 <body>
     <div class="side_bar">
         <div class="add_task">
             <form name="add_task__form">
-                <h3 id="title_new" >新規予定・タスク作成</h3>
+                <h3 id="title_new">新規予定・タスク作成</h3>
                 <h3 id="title_edit" style="display:none;">予定・タスク編集</h3>
                 <button type="button" id="cancel__btn">キャンセル</button>
                 <br>
@@ -219,7 +221,7 @@
                     <input name="number_of_imp_days" id="number_of_imp_days" type="number" value="1" min="1"></input>
                     <br>
                     <div id="imp_date__form--container">
-                        <div name="imp_date__form_1">
+                        <div id="imp_date__form_1" name="imp_date__form_1">
                             <h5>実施時間1</h5>
                             <input name="imp_date_1" type="date"></input>
                             <br />
@@ -462,13 +464,13 @@
                         </select>
                     </div>
 
-                    <br/>
+                    <br />
 
                     <div class="add_task__item">
                         <input type="checkbox" value="favorite" name="favorite" id="favorite" />お気に入り
                     </div>
 
-                    <br/>
+                    <br />
 
                     <button type="button" id="submit__btn">確定</button>
 
