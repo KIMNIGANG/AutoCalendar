@@ -13,9 +13,9 @@ submitButton.onclick = () => {
   signOut(auth)
     .then(() => {
       console.log("loggedout");
-      localStorage.removeItem("uid");
-      localStorage.removeItem("email");
-      localStorage.removeItem("name");
+//       localStorage.removeItem("uid");
+//       localStorage.removeItem("email");
+//       localStorage.removeItem("name");
     })
     .catch((error) => {
       console.log(error);
