@@ -607,3 +607,25 @@ document.getElementById("cancel__btn").addEventListener("click", function () {
     window.location.href = "../constructor/index.html";
   }
 });
+
+console.log(new Task(
+  12345,
+  "m",
+  "",
+  "",
+  true,
+  "Task",
+  false,
+  false,
+  1675177200000,
+  10800000 / (60 * 60 * 1000),
+  1,
+  true,
+  [[1674203638704, 1674207238704], [1674210838704, 1674214438704], [1674256200000, 1674259800000]],
+  3600000 / (60 * 60 * 1000),
+  "null",
+  1,
+  "",
+  "blue",
+  true
+));
