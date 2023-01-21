@@ -102,6 +102,7 @@ document.getElementById("submit__btn").addEventListener("click", function () {
   //タスクの入力内容の妥当性を判断
   if (form_check(new_task) == false) {
     console.log("フォームエラー");
+    alert("フォームの入力内容に不備があります！" + "\n" + "(詳しくは、画面下部をご覧ください。)");
     return;
   }
   //Scheduleクラスに格納
@@ -284,6 +285,7 @@ function AutoScheduling() {
     document.getElementById("auto_scheduling_true").style.display = "";
     document.getElementById("number_of_imp_days").onchange = UnitTimeSplit;
     document.getElementById("imp_date__form--container").innerHTML = "";
+    UnitTimeSplit();
   } else {
     document.getElementById("auto_scheduling_true").style.display = "none";
     document.getElementById("number_of_imp_days").onchange = CreatingForm;
