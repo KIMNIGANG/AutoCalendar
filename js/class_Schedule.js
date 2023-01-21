@@ -254,9 +254,9 @@ export class Schedule {
                 for (var i = 0; i < event.task_children.length; i++) {
                     // 単位時間で分割している場合には, 個々のループを実行
                     for (; j < times.length; j++) {
-                        if (event.task_children[i].specified_time[1] <= times[j][0]) {
-                            break;
-                        }
+                        // if (event.task_children[i].specified_time[1] <= times[j][0]) {
+                        //     break;
+                        // }
                         if (
                             (times[j][0] >= event.task_children[i].specified_time[0] &&
                                 times[j][0] < event.task_children[i].specified_time[1]) || // スタートをまたいでいないか?
@@ -298,9 +298,10 @@ export class Schedule {
                             event.task_children[i + 1].specified_time[0] +
                             event.task_children[i + 1].required_time;
                     }
-                    if (j > 0) {
-                        j--;
-                    }
+                    // if (j > 0) {
+                    //     j--;
+                    // }
+                    j = 0;
                 }
             } else {
                 // 日割りする場合
@@ -314,9 +315,9 @@ export class Schedule {
                 for (var i = 0; i < event.task_children.length; i++) {
                     // 各子タスクについて, [day == 1] の時と同様の動作を実行
                     for (; j < times.length; j++) {
-                        if (event.task_children[i].specified_time[1] <= times[j][0]) {
-                            break;
-                        }
+                        // if (event.task_children[i].specified_time[1] <= times[j][0]) {
+                        //     break;
+                        // }
                         if (
                             (times[j][0] >= event.task_children[i].specified_time[0] &&
                                 times[j][0] < event.task_children[i].specified_time[1]) || // スタートをまたいでいないか?
@@ -363,9 +364,10 @@ export class Schedule {
                             event.task_children[i + 1].specified_time[0] +
                             event.task_children[i + 1].required_time;
                     }
-                    if (j > 0) {
-                        j--;
-                    }
+                    // if (j > 0) {
+                    //     j--;
+                    // }
+                    j = 0;
                 }
             }
         }
