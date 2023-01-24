@@ -50,7 +50,8 @@ if (edit_page == true) {
       document.getElementById("len_minute").value = a.len_minute;
     }
     document.getElementById("auto_scheduling").checked = a.auto_scheduling;
-    document.getElementById("number_of_imp_days").value = a.number_of_children;
+    // document.getElementById("number_of_imp_days").value = a.number_of_children;
+    document.getElementById("number_of_imp_days").value = selected_task.days;  // 微調整 (芦沢)
     AutoScheduling();
     // 自動スケジューリングするか
     if (a.auto_scheduling == false) {
@@ -102,6 +103,7 @@ document.getElementById("submit__btn").addEventListener("click", function () {
   //タスクの入力内容の妥当性を判断
   if (form_check(new_task) == false) {
     console.log("フォームエラー");
+    alert("フォームの入力内容に不備があります！" + "\n" + "(詳しくは、画面下部をご覧ください。)");
     return;
   }
   //Scheduleクラスに格納
@@ -284,6 +286,7 @@ function AutoScheduling() {
     document.getElementById("auto_scheduling_true").style.display = "";
     document.getElementById("number_of_imp_days").onchange = UnitTimeSplit;
     document.getElementById("imp_date__form--container").innerHTML = "";
+    UnitTimeSplit();
   } else {
     document.getElementById("auto_scheduling_true").style.display = "none";
     document.getElementById("number_of_imp_days").onchange = CreatingForm;
@@ -292,7 +295,23 @@ function AutoScheduling() {
 }
 
 //フォームの動的化：number_of_imp_days分だけフォームを作成
-document.getElementById("number_of_imp_days").onchange = CreatingForm;
+if (document.getElementById("auto_scheduling").checked === true) {
+  document.getElementById("number_of_imp_days").onchange = UnitTimeSplit;
+}
+else {
+  document.getElementById("number_of_imp_days").onchange = CreatingForm;
+}
+
+//フォームの動的化：実施日数が1日の時だけ単位時間分割用フォームを作成
+function UnitTimeSplit() {
+  if (Number(document.getElementById("number_of_imp_days").value) == 1) {  // (日割りしない場合)
+    document.getElementById("unit_time").style.display = "";
+  } else {
+    document.getElementById("unit_time").style.display = "none";
+    document.getElementById("unit_time").value = "1440";  // (初期化)
+  }
+}
+
 function CreatingForm() {
   var n = Number(document.getElementById("number_of_imp_days").value);
   document.getElementById("imp_date__form--container").innerHTML = "";
@@ -486,16 +505,6 @@ function CreatingForm() {
     document
       .getElementById("imp_date__form--container")
       .appendChild(imp_date__form);
-  }
-}
-
-//フォームの動的化：実施日数が1日の時だけ単位時間分割用フォームを作成
-function UnitTimeSplit() {
-  if (Number(document.getElementById("number_of_imp_days").value) == 1) {  // (日割りしない場合)
-    document.getElementById("unit_time").style.display = "";
-  } else {
-    document.getElementById("unit_time").style.display = "none";
-    document.getElementById("unit_time").value = "1440";  // (初期化)
   }
 }
 
