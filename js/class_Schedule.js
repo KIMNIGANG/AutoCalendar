@@ -306,10 +306,10 @@ export class Schedule {
                             event.task_children[i + 1].specified_time[0] +
                             event.task_children[i + 1].required_time;
                     }
-                    // if (j > 0) {
-                    //     j--;
-                    // }
-                    j = 0;
+                    if (j > 0) {
+                        j--;
+                    }
+                    // j = 0;
                     isBreak = false;
                 }
             } else {
@@ -381,10 +381,10 @@ export class Schedule {
                             event.task_children[i + 1].specified_time[0] +
                             event.task_children[i + 1].required_time;
                     }
-                    // if (j > 0) {
-                    //     j--;
-                    // }
-                    j = 0;
+                    if (j > 0) {
+                        j--;
+                    }
+                    // j = 0;
                     isBreak = false;
                 }
             }
