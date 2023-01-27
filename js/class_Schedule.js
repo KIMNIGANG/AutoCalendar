@@ -251,12 +251,14 @@ export class Schedule {
                     event.task_children[0].specified_time[0] +
                     event.task_children[0].required_time;
                 var j = 0;
+                var isBreak = false;
                 for (var i = 0; i < event.task_children.length; i++) {
                     // 単位時間で分割している場合には, 個々のループを実行
                     for (; j < times.length; j++) {
-                        // if (event.task_children[i].specified_time[1] <= times[j][0]) {
-                        //     break;
-                        // }
+                        if (event.task_children[i].specified_time[1] <= times[j][0]) {
+                            isBreak = true;
+                            break;
+                        }
                         if (
                             (times[j][0] >= event.task_children[i].specified_time[0] &&
                                 times[j][0] < event.task_children[i].specified_time[1]) || // スタートをまたいでいないか?
@@ -289,8 +291,14 @@ export class Schedule {
                         );
                         console.log("警告：この予定の追加はやめといたほうがいいよ!");
                     }
-                    // 締め切りの過ぎていないタスクを追加する
-                    times.splice(j, 0, event.task_children[i].specified_time);
+                    // 締め切りの過ぎていないタスクを追加する (ただし, breakするかしないかによって位置が変わる.) 
+                    if (isBreak) {
+                        times.splice(j, 0, event.task_children[i].specified_time);  // ((j - 1)番目のタスクの一つ後に入れる.)
+                    }
+                    else {
+                        times.splice(j + 1, 0, event.task_children[i].specified_time);  // (j番目のタスクの一つ後に入れる.)
+                    }
+                    // 次の子タスクの時間を決める.
                     if (i + 1 < event.task_children.length) {
                         event.task_children[i + 1].specified_time[0] =
                             event.task_children[i].specified_time[1] + 60 * 60 * 1000; // 60分ごとに行う
@@ -298,10 +306,11 @@ export class Schedule {
                             event.task_children[i + 1].specified_time[0] +
                             event.task_children[i + 1].required_time;
                     }
-                    // if (j > 0) {
-                    //     j--;
-                    // }
-                    j = 0;
+                    if (j > 0) {
+                        j--;
+                    }
+                    // j = 0;
+                    isBreak = false;
                 }
             } else {
                 // 日割りする場合
@@ -312,12 +321,14 @@ export class Schedule {
                     event.task_children[0].specified_time[0] +
                     event.task_children[0].required_time;
                 var j = 0;
+                var isBreak = false;
                 for (var i = 0; i < event.task_children.length; i++) {
                     // 各子タスクについて, [day == 1] の時と同様の動作を実行
                     for (; j < times.length; j++) {
-                        // if (event.task_children[i].specified_time[1] <= times[j][0]) {
-                        //     break;
-                        // }
+                        if (event.task_children[i].specified_time[1] <= times[j][0]) {
+                            isBreak = true;
+                            break;
+                        }
                         if (
                             (times[j][0] >= event.task_children[i].specified_time[0] &&
                                 times[j][0] < event.task_children[i].specified_time[1]) || // スタートをまたいでいないか?
@@ -350,8 +361,14 @@ export class Schedule {
                         );
                         console.log("警告：この予定の追加はやめといたほうがいいよ!");
                     }
-                    // 締め切りの過ぎていないタスクを追加する
-                    times.splice(j, 0, event.task_children[i].specified_time);
+                    // 締め切りの過ぎていないタスクを追加する (ただし, breakするかしないかによって位置が変わる.) 
+                    if (isBreak) {
+                        times.splice(j, 0, event.task_children[i].specified_time);  // ((j - 1)番目のタスクの一つ後に入れる.)
+                    }
+                    else {
+                        times.splice(j + 1, 0, event.task_children[i].specified_time);  // (j番目のタスクの一つ後に入れる.)
+                    }
+                    // 次の子タスクの時間を決める.
                     if (i + 1 < event.task_children.length) {
                         const tmp = new Date(event.task_children[i].specified_time[1]);
                         event.task_children[i + 1].specified_time[0] = new Date(
@@ -364,10 +381,11 @@ export class Schedule {
                             event.task_children[i + 1].specified_time[0] +
                             event.task_children[i + 1].required_time;
                     }
-                    // if (j > 0) {
-                    //     j--;
-                    // }
-                    j = 0;
+                    if (j > 0) {
+                        j--;
+                    }
+                    // j = 0;
+                    isBreak = false;
                 }
             }
         }
