@@ -6,6 +6,9 @@ class DrawCalendar{
     constructor(all_tasks) {
         let tasks = [];
         for (const task of all_tasks) {
+            if (task.finished) {
+                continue;
+            }
             for (const child of task.task_children) {
                 let event = {
                     title: child.name,

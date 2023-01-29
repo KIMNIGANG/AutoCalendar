@@ -72,9 +72,10 @@ export function taskToArray(task) {
         var time_0 = timestampToDisplay(child.specified_time[0], 2);
         var time_1 = timestampToDisplay(child.specified_time[1], 2);
 
-        a["imp_date_" + count] = time_0.year + "-" + time_0.month + "-" + time_0.date;
+        a["imp_start_date_" + count] = time_0.year + "-" + time_0.month + "-" + time_0.date;
         a["imp_start_hour_" + count] = time_0.hour;
         a["imp_start_minute_" + count] = time_0.minute;
+        a["imp_end_date_" + count] = time_1.year + "-" + time_1.month + "-" + time_1.date;
         a["imp_end_hour_" + count] = time_1.hour;
         a["imp_end_minute_" + count] = time_1.minute;
     }
