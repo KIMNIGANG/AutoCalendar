@@ -47,6 +47,8 @@ export function taskToArray(task) {
     a.place = task.place;
     a.task_duplication = task.duplicate;
     a.title = task.name;
+    a.repeat_unit = task.repeat_unit;
+    a.days = task.days;
 
     a.number_of_imp_days = task.task_children.length;
     a.unit_time = task.unit_time / (1000 * 60);
