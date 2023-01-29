@@ -142,7 +142,6 @@ if (selected_task) {
   `;
   }
 
-
   detail_container.innerHTML += `
     <div class="add_task__item">
     <p>実施時間</p>
@@ -151,7 +150,34 @@ if (selected_task) {
     <br>
     ${specified_times}
     </div>
+              `;
 
+  if (selected_task.plan_or_task == 0) {
+      let repeat_unit_string;
+      switch (selected_task.repeat_unit) {
+          case "day":
+            repeat_unit_string = "毎日";
+            break;
+          case "week":
+            repeat_unit_string = "毎週";
+            break;
+          case "month":
+            break;
+          case "year":
+            break;
+          default:
+            repeat_unit_string = "特になし";
+            break;
+      }
+      detail_container.innerHTML += `
+        <div class="add_task__item">
+        <p>頻度</p>
+        ${repeat_unit_string}
+        </div>
+                `;
+  }
+  
+  detail_container.innerHTML += `
     <div class="add_task__item">
     <p>スケジューリング設定</p>
     ${duplicate}

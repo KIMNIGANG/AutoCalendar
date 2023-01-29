@@ -34,6 +34,7 @@ if (edit_page == true) {
 
   // Taskを配列に変換
   let a = taskToArray(selected_task);
+  console.log(selected_task);
   console.log(a);
 
   if (selected_task) {
@@ -51,7 +52,7 @@ if (edit_page == true) {
     }
     document.getElementById("auto_scheduling").checked = a.auto_scheduling;
     // document.getElementById("number_of_imp_days").value = a.number_of_children;
-    document.getElementById("number_of_imp_days").value = selected_task.days;  // 微調整 (芦沢)
+    document.getElementById("number_of_imp_days").value = a.days;  // 微調整 (芦沢)
     AutoScheduling();
     // 自動スケジューリングするか
     if (a.auto_scheduling == false) {
@@ -66,6 +67,7 @@ if (edit_page == true) {
         document.getElementById("imp_end_minute_" + i).value =
           a["imp_end_minute_" + i];
       }
+      document.getElementById("repeat_unit").value = a.repeat_unit;
     } else {
       document.getElementById("importance").value = a.importance;
       document.getElementById("unit_time").value = a.unit_time;
