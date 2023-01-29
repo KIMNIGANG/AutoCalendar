@@ -89,18 +89,18 @@ export class Schedule {
                                 EndDate.getMilliseconds()
                             );  
                         }
-                        // 30日後
+                        // 60日後
                         var ThirtyDaysAfter = new Date(
                             tmp.getFullYear(),
                             tmp.getMonth(),
-                            tmp.getDate() + 30,
+                            tmp.getDate() + 60,
                             StartDate.getHours(),
                             StartDate.getMinutes(),
                             StartDate.getSeconds(),
                             StartDate.getMilliseconds()
                         );
                         while (tmp.getTime() <= ThirtyDaysAfter.getTime() || tmp.getTime() < MaxDeadline.getTime()) {  
-                            // 締め切り前の定例予定を全て入れる (ただし, 30日後までは最低限入れておく.) 
+                            // 締め切り前の定例予定を全て入れる (ただし, 60日後までは最低限入れておく.) 
                             var new_task = new Task(
                                 child.id,
                                 child.name,
@@ -229,6 +229,9 @@ export class Schedule {
         //     times.push(event.specified_time);
         // }
         for (var i = 0; i < this.on_time.length; i++) {
+            if (this.on_time[i].finished) {
+                continue;
+            }
             for (const child of this.on_time[i].task_children) {
                 times.push(child.specified_time);
             }
