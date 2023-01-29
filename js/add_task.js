@@ -57,12 +57,11 @@ if (edit_page == true) {
     // 自動スケジューリングするか
     if (a.auto_scheduling == false) {
       for (var i = 1; i < a.number_of_children + 1; i++) {
-        document.getElementById("imp_start_date_" + i).value = a["imp_start_date_" + i];
+        document.getElementById("imp_date_" + i).value = a["imp_date_" + i];
         document.getElementById("imp_start_hour_" + i).value =
           a["imp_start_hour_" + i];
         document.getElementById("imp_start_minute_" + i).value =
           a["imp_start_minute_" + i];
-        document.getElementById("imp_end_date_" + i).value = a["imp_end_date_" + i];
         document.getElementById("imp_end_hour_" + i).value =
           a["imp_end_hour_" + i];
         document.getElementById("imp_end_minute_" + i).value =
@@ -323,10 +322,9 @@ function CreatingForm() {
     imp_date__form.setAttribute("name", "imp_date__form_" + String(i));
     imp_date__form.innerHTML = `
         <h5>実施時間${i}</h5>
+        <input name="imp_date_${i}" id="imp_date_${i}" type="date"></input>
+        <br />
         開始：
-        <br />
-        <input name="imp_start_date_${i}" id="imp_start_date_${i}" type="date"></input>
-        <br />
         <select name="imp_start_hour_${i}" id="imp_start_hour_${i}">
             <option value="00">00</option>
             <option value="01">01</option>
@@ -417,9 +415,6 @@ function CreatingForm() {
         </select>分
         <br />
         終了：
-        <br />
-        <input name="imp_end_date_${i}" id="imp_end_date_${i}" type="date"></input>
-        <br />
         <select name="imp_end_hour_${i}" id="imp_end_hour_${i}">
             <option value="00">00</option>
             <option value="01">01</option>
@@ -564,14 +559,14 @@ function get_new_task() {
     new_specified_time = [];
     for (var i = 1; i < Number(a["number_of_imp_days"]) + 1; i++) {
       var imp_start_date = new Date(
-        a["imp_start_date_" + String(i)] +
+        a["imp_date_" + String(i)] +
         " " +
         a["imp_start_hour_" + String(i)] +
         ":" +
         a["imp_start_minute_" + String(i)]
       ).getTime();
       var imp_end_date = new Date(
-        a["imp_end_date_" + String(i)] +
+        a["imp_date_" + String(i)] +
         " " +
         a["imp_end_hour_" + String(i)] +
         ":" +
