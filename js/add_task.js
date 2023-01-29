@@ -202,7 +202,7 @@ function form_check(task) {
         }
       }
       if (error_number_3 == 0) {
-        if (task.specified_time[0] > task.specified_time[1]) {
+        if (task.specified_time[0] >= task.specified_time[1]) {
           //実施時間の順序は正しいか
           error_number_2 += 1;
         } else if (task.plan_or_task == 1 && task.specified_time[1] > task.deadline) {
