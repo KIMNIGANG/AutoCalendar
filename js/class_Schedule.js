@@ -558,7 +558,7 @@ export class Schedule {
                                 EndDate.getMilliseconds()
                             );  
                         }
-                        // 2ヶ月後 
+                        // 3ヶ月後 
                         var MonthAfter = new Date(
                             tmp.getFullYear(),
                             tmp.getMonth() + 3,
@@ -569,7 +569,7 @@ export class Schedule {
                             StartDate.getMilliseconds()
                         );
                         while (tmp.getTime() <= MonthAfter.getTime() || tmp.getTime() < MaxDeadline.getTime()) {  
-                            // 締め切り前の定例予定を全て入れる (ただし, 1ヶ月後までは最低限入れておく.) 
+                            // 締め切り前の定例予定を全て入れる (ただし, 3ヶ月後までは最低限入れておく.) 
                             var new_task = new Task(
                                 child.id,
                                 child.name,
