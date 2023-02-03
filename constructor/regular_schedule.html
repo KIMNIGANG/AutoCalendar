@@ -3,103 +3,16 @@
 
 <head>
     <meta charset='utf-8' />
-    <link href='./node_modules/fullcalendar/main.css' rel='stylesheet' />
-    <script src='./node_modules/fullcalendar/main.js'></script>
+    <!-- <link href='./node_modules/fullcalendar/main.css' rel='stylesheet' />
+    <script src='./node_modules/fullcalendar/main.js'></script> -->
     <h1> 
         AutoCalender
-        <img id="logoutIcon" src="logoutIcon.png">
+        <img id="logoutIcon" src="../img/logoutIcon.png">
     </h1>
+
+    <script type='module' src='../dist/index.global.js'></script>
     
-    <script>
-        /**
-         * 現段階でのtodo
-         * それぞれの関数にコメントつける
-         * 睡眠時間とかの日々のルーティーンの設定
-         * 優先度に応じたTodoのスケジューリングの実装
-         * 授業の取得
-         * 祝日(学校の日程)の実装
-         * イベントの固定とかの見直し
-        */
-
-        /**
-         * function GateDate()
-         * FullCalendar用の時間情報を返す。
-         * 引数：なし
-         * 返り値：なし
-        */
-       
-        const now = new Date();
-        const GetDate = {
-            Year: now.getFullYear(),
-            Month: ("0" + (now.getMonth() + 1)).slice(-2),
-            Date: ("0" + now.getDate()).slice(-2),
-            Hour: ("0" + now.getHours()).slice(-2),
-            Min: ("0" + now.getMinutes()).slice(-2)
-        }
-
-        /**
-         * function GetEvents(id)
-         * idに対応した人のイベント(ToDoとか予定とか)を取ってくる
-         * 引数：ユーザー固有のID
-         * 返り値：連想配列の配列
-         * [{title: イベント名, start:イベント開始時間, end: イベント終了時間, editable: 固定された用事かどうか, overlap: その予定の上に重ねれるか}]
-        */
-        function GetEvents(id){
-            // 仮置きのeventを用意
-            const events = [{
-                title: "test",
-                start: GetDate.Year + '-' + GetDate.Month + '-' + GetDate.Date + 'T13:00:00',
-                end: GetDate.Year + '-' + GetDate.Month + '-' + GetDate.Date + 'T15:00:00',
-                editable: false
-            }];
-            return events;
-        }
-        let calendar = null;    // calendarオブジェクトをグローバル変数にしておく
-        document.addEventListener('DOMContentLoaded', function () {
-            const calendarEl = document.getElementById('calendar');
-
-            calendar = new FullCalendar.Calendar(calendarEl, {
-                // カレンダーに表示する文字を日本語にする
-                //locale: 'ja',
-
-                headerToolbar: {
-                    left: 'prev,next today',
-                    center: 'title',
-                    right: 'dayGridMonth,timeGridWeek_Today,timeGridDay,listMonth'
-                },
-                views: { // 今日を開始日とした1週間の表示
-                    timeGridWeek_Today: {
-                        type: 'timeGrid',
-                        duration: { days: 7 },
-                        buttonText: 'Week'
-                    }
-                },
-                navLinks: true, // can click day/week names to navigate views
-                editable: true,
-                selectable: true,
-                nowIndicator: true,
-                events: GetEvents(0),
-                
-                // イベントがクリックされたとき
-                eventClick: function (jsEvent) {
-                    if(window.confirm("このイベントを削除しますか？")){
-                        jsEvent.event.remove();
-                    }
-                },
-                eventTimeFormat: { hour: '2-digit', minute: '2-digit' }
-            });
-
-            calendar.render();
-        });
-
-        logoutIcon = document.getElementById("logoutIcon");
-        logoutIcon.addEventListener("click", function(e) {
-            var result = window.confirm("ログアウトしますか？");
-            if (result) {
-                location.href = "after_login.html";
-            }
-        });
-
+    <script src="../js/data_send.js">
     </script>
     <style>
         body {
@@ -136,7 +49,7 @@
     <div id='calendar'></div>
     <div id="task">
         <h3>
-            <img id="addIcon" src="addIcon.png" onclick="location.href = 'add_task.html'">
+            <img id="addIcon" src="../img/addIcon.png" onclick="location.href = 'add_task.html'">
             タスクの追加
         </h3>
     </div>
