@@ -307,7 +307,7 @@ var user1 = new User(2123, "山田太郎", "yamada.taro@gmail.com", myLifestyle,
 var task1 = new Task(123, "デザイン開発", "課題", "Webページのデザインを開発せねば〜", false, false, false, false, (new Date(2023, 1, 24, 18, 20)).getTime(), 4, 3, true, null);
 var task2 = new Task(101, "情報線形代数レポート課題", "課題", "早く早く終わりたい！！", false, false, false, false, (new Date(2023, 1, 24, 19, 0)).getTime(), 1, 1, true, null);
 var task3 = new Task(100, "enpit", "授業", "enpitの授業！！！！！！！", false, false, false, false, (new Date(2023, 1, 25, 18, 0)).getTime(), null, 1, false, [[(new Date(2023, 1, 8, 12, 15)).getTime(), (new Date(2023, 1, 8, 15, 0)).getTime()]]);
-var task4 = new Task(142, "情報英語発展", "課題", "英語で書かれた情報の専門誌を和訳する", false, false, false, false, (new Date(2023, 1, 16, 18, 30)).getTime(), 3, 1, true, null);
+var task4 = new Task(142, "情報英語発展", "課題", "英語で書かれた情報の専門誌を和訳する", false, false, false, false, (new Date(2023, 1, 5, 0, 0)).getTime(), 3, 1, true, null);
 var task5 = new Task(182, "ドイツ語基礎", "課題", "ドイツ語で会話をしてみよう", false, false, false, false, (new Date(2023, 1, 14, 18, 30)).getTime(), 3, 1, true, null);
 
 user1.schedule.addTask(task1);
@@ -317,7 +317,7 @@ user1.schedule.addTask(task4);
 
 user1.schedule.viewAllTasks();
 
-user1.schedule.editTask(task2,task5);
+user1.schedule.editTask(task4,task5);
 
 // // カテゴリに毎年/毎月/毎週/平日/週末/毎日を設定する？
 // var plan1 = new Task(199, "睡眠時間", "生活", "いい夢みたい!!!!", true, true, false, false, null, 8, 1, false, [[(new Date(2022, 11, 24, 0, 0)).getTime(), (new Date(2022, 11, 24, 8, 0)).getTime()]]);
