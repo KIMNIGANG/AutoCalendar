@@ -120,6 +120,7 @@ class Schedule{
         if(task.auto_scheduled) {
             // 自動スケジューリングをする処理 (task_childrenはコンストラクタで更新している → 子タスクがあればtask_childrenに要素が2個以上入っている.)
             this.auto_schedule.push(task);
+            console.log("a");
             this.AutoScheduling();
         } else if (!(task.duplicate)) {
             // 自動スケジューリングをしない処理
@@ -253,7 +254,15 @@ class Schedule{
         var all_tasks = [];
         while (i < this.on_time.length || j < this.auto_schedule.length) {
             if (i >= this.on_time.length) {
-                all_tasks.push(this.auto_schedule[j]);
+                var n = this.auto_schedule[j].task_children.length;
+                if (n > 1) {
+                    for (var k = 0; k < n; k++) {
+                        all_tasks.push(this.auto_schedule[j].task_children[k]);
+                    }
+                }
+                else {
+                    all_tasks.push(this.auto_schedule[j]);
+                }
                 j++;
             }
             else if (j >= this.auto_schedule.length) {
@@ -262,7 +271,15 @@ class Schedule{
             }
             else {
                 if (this.on_time[i].specified_time[0] > this.auto_schedule[j].specified_time[0]) {
-                    all_tasks.push(this.auto_schedule[j]);
+                    var n = this.auto_schedule[j].task_children.length;
+                    if (n > 1) {
+                        for (var k = 0; k < n; k++) {
+                            all_tasks.push(this.auto_schedule[j].task_children[k]);
+                        }
+                    }
+                    else {
+                        all_tasks.push(this.auto_schedule[j]);
+                    }
                     j++;
                 } else {
                     all_tasks.push(this.on_time[i]);
@@ -287,20 +304,24 @@ var mySettings = new Settings();
 
 var user1 = new User(2123, "山田太郎", "yamada.taro@gmail.com", myLifestyle, mySchedule, mySettings);
 // constructor(id, name, category, overview, favorite, plan_or_task, finished, duplicate, deadline, required_time, days, auto_scheduled, specified_time)
-var task1 = new Task(123, "デザイン開発", "課題", "Webページのデザインを開発せねば〜", false, false, false, false, (new Date(2022, 11, 24, 18, 20)).getTime(), 4, 3, true, null);
-var task2 = new Task(101, "情報線形代数レポート課題", "課題", "早く早く終わりたい！！", false, false, false, false, (new Date(2022, 11, 24, 19, 0)).getTime(), 1, 1, false, [[(new Date(2022, 11, 17, 0, 0)).getTime(), (new Date(2022, 11, 17, 2, 0)).getTime()]]);
-var task3 = new Task(100, "デザイン課題", "課題", "デザインの授業の課題！！！！！！！", false, false, false, false, (new Date(2022, 11, 25, 18, 0)).getTime(), null, 1, false, [[(new Date(2022, 11, 24, 8, 20)).getTime(), (new Date(2022, 11, 24, 9, 20)).getTime()]]);
-var task4 = new Task(142, "情報英語発展", "課題", "英語で書かれた情報の専門誌を和訳する", false, false, false, false, (new Date(2022, 11, 16, 18, 30)).getTime(), 3, 1, true, null);
-// var task5 = new Task(182, "ドイツ語基礎", "課題", "ドイツ語で会話をしてみよう", false, false, false, false, (new Date(2022, 11, 14, 18, 30)).getTime(), 3, 1, true, null);
+var task1 = new Task(123, "デザイン開発", "課題", "Webページのデザインを開発せねば〜", false, false, false, false, (new Date(2023, 1, 24, 18, 20)).getTime(), 4, 3, true, null);
+var task2 = new Task(101, "情報線形代数レポート課題", "課題", "早く早く終わりたい！！", false, false, false, false, (new Date(2023, 1, 24, 19, 0)).getTime(), 1, 1, true, null);
+var task3 = new Task(100, "enpit", "授業", "enpitの授業！！！！！！！", false, false, false, false, (new Date(2023, 1, 25, 18, 0)).getTime(), null, 1, false, [[(new Date(2023, 1, 8, 12, 15)).getTime(), (new Date(2023, 1, 8, 15, 0)).getTime()]]);
+var task4 = new Task(142, "情報英語発展", "課題", "英語で書かれた情報の専門誌を和訳する", false, false, false, false, (new Date(2023, 1, 16, 18, 30)).getTime(), 3, 1, true, null);
+var task5 = new Task(182, "ドイツ語基礎", "課題", "ドイツ語で会話をしてみよう", false, false, false, false, (new Date(2023, 1, 14, 18, 30)).getTime(), 3, 1, true, null);
 
 user1.schedule.addTask(task1);
 user1.schedule.addTask(task2);
 user1.schedule.addTask(task3);
-user1.schedule.editTask(task2,task4);
+user1.schedule.addTask(task4);
 
-// カテゴリに毎年/毎月/毎週/平日/週末/毎日を設定する？
-var plan1 = new Task(199, "睡眠時間", "生活", "いい夢みたい!!!!", true, true, false, false, null, 8, 1, false, [[(new Date(2022, 11, 24, 0, 0)).getTime(), (new Date(2022, 11, 24, 8, 0)).getTime()]]);
+user1.schedule.viewAllTasks();
 
-user1.lifestyle.addTask(plan1);
+user1.schedule.editTask(task2,task5);
+
+// // カテゴリに毎年/毎月/毎週/平日/週末/毎日を設定する？
+// var plan1 = new Task(199, "睡眠時間", "生活", "いい夢みたい!!!!", true, true, false, false, null, 8, 1, false, [[(new Date(2022, 11, 24, 0, 0)).getTime(), (new Date(2022, 11, 24, 8, 0)).getTime()]]);
+
+// user1.lifestyle.addTask(plan1);
 
 user1.schedule.viewAllTasks();
