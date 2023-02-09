@@ -303,11 +303,11 @@ var mySettings = new Settings();
 
 var user1 = new User(2123, "山田太郎", "yamada.taro@gmail.com", myLifestyle, mySchedule, mySettings);
 // constructor(id, name, category, overview, favorite, plan_or_task, finished, duplicate, deadline, required_time, days, auto_scheduled, specified_time)
-var task1 = new Task(123, "デザイン開発", "課題", "Webページのデザインを開発せねば〜", false, false, false, false, (new Date(2023, 1, 24, 18, 20)).getTime(), 4, 3, true, null);
-var task2 = new Task(101, "情報線形代数レポート課題", "課題", "早く早く終わりたい！！", false, false, false, false, (new Date(2023, 1, 24, 19, 0)).getTime(), 1, 1, true, null);
-var task3 = new Task(100, "enpit", "授業", "enpitの授業！！！！！！！", false, false, false, false, (new Date(2023, 1, 25, 18, 0)).getTime(), null, 1, false, [[(new Date(2023, 1, 8, 12, 15)).getTime(), (new Date(2023, 1, 8, 15, 0)).getTime()]]);
-var task4 = new Task(142, "情報英語発展", "課題", "英語で書かれた情報の専門誌を和訳する", false, false, false, false, (new Date(2023, 1, 5, 0, 0)).getTime(), 3, 1, true, null);
-var task5 = new Task(142, "情報英語発展", "課題", "英語で書かれた情報の専門誌を和訳する", false, false, false, false, (new Date(2023, 1, 10, 0, 0)).getTime(), 3, 1, true, null);
+var task1 = new Task(123, "実験Bレポート", "課題", "Webページのデザインを開発せねば〜", false, false, false, false, (new Date(2023, 1, 10, 17, 0)).getTime(), 5, 2, true, null);
+var task2 = new Task(101, "情報理論課題", "課題", "早く早く終わりたい！！", false, false, false, false, (new Date(2023, 1, 10, 12, 0)).getTime(), 3, 1, true, null);
+var task3 = new Task(100, "情報理論", "授業", "情報理論の授業！！！！！！！", false, false, false, false, (new Date(2023, 1, 10, 23, 55)).getTime(), null, 1, false, [[(new Date(2023, 1, 10, 12, 15)).getTime(), (new Date(2023, 1, 10, 15, 0)).getTime()]]);
+var task4 = new Task(142, "情報英語発展", "課題", "英語で書かれた情報の専門誌を和訳する", false, false, false, false, (new Date(2023, 1, 9, 0, 0)).getTime(), 1, 1, true, null);
+var task5 = new Task(142, "情報英語発展", "課題", "英語で書かれた情報の専門誌を和訳する", false, false, false, false, (new Date(2023, 1, 16, 0, 0)).getTime(), 1, 1, true, null);
 
 user1.schedule.addTask(task1);
 user1.schedule.addTask(task2);
